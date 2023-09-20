@@ -48,3 +48,4 @@ BPMN диаграммы для пользователя.\
 <br/><br/>
 ![alt text for png](img/updated_components.png)
 <br/><br/>
+9. Экраны будущего web-приложения на уровне черновых эскизов.
