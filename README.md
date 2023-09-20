@@ -54,3 +54,11 @@ BPMN диаграммы для пользователя.\
 <br/><br/>
 ![alt text for png](img/adminMenu.png)
 <br/><br/>
+Меню пользователя:
+<br/><br/>
+![alt text for png](img/userMenu.png)
+<br/><br/>
+Меню незарегистрированного пользователя:
+<br/><br/>
+![alt text for png](img/unregMenu.png)
+<br/><br/>
