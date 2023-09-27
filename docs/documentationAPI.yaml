@@ -1,0 +1,512 @@
+openapi: 3.0.3
+info:
+  title: Сайт медицинской клиники - OpenAPI 3.0
+  description: |-
+    Данное приложение позволит автоматизировать запись пациентов к врачам.
+  contact:
+    email: glebka.vagapov@mail.ru
+  version: 1.0.0
+externalDocs:
+  description: Find out more about this application
+  url: https://github.com/vge20
+servers:
+  - url: https://localhost:8080/api/v1
+tags:
+  - name: doctor
+    description: Операции с врачами клиники
+  - name: patient
+    description: Операции с пациентами клиники
+  - name: admin
+    description: Операции с администраторами клиники
+  - name: record
+    description: Операции с записями пользователей на приём к врачам
+    
+paths:
+
+  /doctor:
+    put:
+      tags:
+        - doctor
+      summary: Обновить существующего врача
+      operationId: updateDoctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+        required: true
+      responses:
+        '200':
+          description: Врач обновлён
+        '404':
+          description: Врач с указанным идентификатором не найден
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+    post:
+      tags:
+        - doctor
+      summary: Добавить нового врача
+      operationId: addDoctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+        required: true
+      responses:
+        '201':
+          description: Врач добавлен
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+    get:
+      tags:
+        - doctor
+      summary: Получить список врачей
+      operationId: getDoctorsList
+      responses:
+        '200':
+          description: Список врачей получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Doctor' 
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+  /doctor/{id}:
+    delete:
+      tags:
+        - doctor
+      summary: Удалить существующего врача
+      operationId: deleteDoctor
+      parameters:
+        - name: id
+          in: path
+          description: id удаляемого врача
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Врач удалён
+        '404':
+          description: Врач с указанным идентификатором не найден
+        '405':
+          description: Невалидный id  
+        '500':
+          description: Внутренняя ошибка работы сервера
+    get:
+      tags:
+        - doctor
+      summary: Получить врача
+      operationId: getDoctor
+      parameters:
+        - name: id
+          in: path
+          description: id врача
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Врач получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        '404':
+          description: Врач с указанным идентификатором не найден
+        '405':
+          description: Невалидный id  
+        '500':
+          description: Внутренняя ошибка работы сервера
+  
+  /record:
+    delete:
+      tags:
+        - record
+      summary: Удалить запись на приём
+      operationId: deleteRecord
+      parameters:
+        - name: doctorId
+          in: query
+          description: id врача удаляемой записи
+          required: true
+          schema:
+            type: integer
+        - name: patientLogin
+          in: query
+          description: Логин пользователя удаляемой записи
+          required: true
+          schema:
+            type: string
+        - name: date
+          in: query
+          description: Дата удаляемой записи
+          required: true
+          schema:
+            type: string
+        - name: startTime
+          in: query
+          description: Время начала удаляемой записи
+          required: true
+          schema:
+            type: string
+        - name: endTime
+          in: query
+          description: Время конца удаляемой записи
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Запись удалена
+        '404':
+          description: Запись с указанными параметрами не найдена
+        '405':
+          description: Невалидные параметры 
+        '500':
+          description: Внутренняя ошибка работы сервера
+    
+    post:
+      tags:
+        - record
+      summary: Добавить запись на приём
+      operationId: addRecord
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Record'
+        required: true
+      responses:
+        '201':
+          description: Запись добавлена
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+    
+    put:
+      tags:
+        - record
+      summary: Обновить запись на приём
+      operationId: updateRecord
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Record'
+        required: true
+      responses:
+        '200':
+          description: Запись обновлена
+        '404':
+          description: Запись с указанными параметрами не найдена
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+    
+  /patient/{login}:
+    get:
+      tags:
+        - patient
+      summary: Получить пациента по логину
+      operationId: getPatientByLogin
+      parameters:
+        - name: login
+          in: path
+          description: Логин пациента
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пациент получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        '404':
+          description: Пациент с указанным логином не найден
+        '405':
+          description: Невалидный id  
+        '500':
+          description: Внутренняя ошибка работы сервера
+    
+    delete:
+      tags:
+        - patient
+      summary: Удалить пациента по логину
+      operationId: deletePatientByLogin
+      parameters:
+        - name: login
+          in: path
+          description: Логин пациента
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пациент удалён
+        '404':
+          description: Пациент с указанным логином не найден
+        '405':
+          description: Невалидный id  
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+  /patient:
+    get:
+      tags:
+        - patient
+      summary: Получить пациента по логину и паролю
+      operationId: getPatientByLoginAndPassword
+      parameters:
+        - name: login
+          in: query
+          description: Логин пациента
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: Пароль пациента
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Пациент получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        '404':
+          description: Пациент с указанным логином и паролем не найден
+        '405':
+          description: Невалидные параметры 
+        '500':
+          description: Внутренняя ошибка работы сервера
+    
+    post:
+      tags:
+        - patient
+      summary: Добавить пациента
+      operationId: addPatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        '201':
+          description: Пациент добавлен
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+    put:
+      tags:
+        - patient
+      summary: Обновить пациента
+      operationId: updatePatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        '200':
+          description: Пациент обновлён
+        '404':
+          description: Пациент с указанными параметрами не найден
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+  
+  /patient/all:
+    get:
+      tags:
+        - patient
+      summary: Получить список пациентов
+      operationId: getPatientsList
+      responses:
+        '200':
+          description: Список пациентов получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient' 
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+  /admin:
+    get:
+      tags:
+        - admin
+      summary: Получить администратора по логину и паролю
+      operationId: getAdminByLoginAndPassword
+      parameters:
+        - name: login
+          in: query
+          description: Логин администратора
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: Пароль администратора
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Администратор получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+        '404':
+          description: Администратор с указанным логином и паролем не найден
+        '405':
+          description: Невалидные параметры 
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+    put:
+      tags:
+        - admin
+      summary: Обновить администратора
+      operationId: updateAdmin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+        required: true
+      responses:
+        '200':
+          description: Администратор обновлён
+        '404':
+          description: Администратор с указанными параметрами не найден
+        '405':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+            
+components:
+  schemas:
+  
+    Doctor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        firstName:
+          type: string
+          example: Egor
+        lastName:
+          type: string
+          example: Petrov
+        gender:
+          type: boolean
+          example: true
+        specialization:
+          type: string
+          example: surgeon
+          
+    Record:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        doctorId:
+          type: integer
+          example: 10
+        patientLogin:
+          type: string
+          example: ivan1996
+        date:
+          type: string
+          example: 2023-10-10
+        startTime:
+          type: string
+          example: '16:00:00'
+        endTime:
+          type: string
+          example: '16:30:00'  
+    
+    Patient:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        login:
+          type: string
+          example: ivan1996
+        password:
+          type: string
+          example: qwerty
+        firstName:
+          type: string
+          example: Dmitry
+        lastName:
+          type: string
+          example: Sobolev
+        gender:
+          type: boolean
+          example: true
+        birthDate:
+          type: string
+          example: 1993-05-16
+        hivStatus:
+          type: boolean
+          example: true
+        bloodType:
+          type: integer
+          example: 1
+    
+    Admin:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        login:
+          type: string
+          example: ivan1996
+        password:
+          type: string
+          example: qwerty
+        firstName:
+          type: string
+          example: Ivan
+        lastName:
+          type: string
+          example: Nosov
+        gender:
+          type: boolean
+          example: true
+        birthDate:
+          type: string
+          example: 1997-07-02
+    
