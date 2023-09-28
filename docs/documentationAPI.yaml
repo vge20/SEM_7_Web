@@ -195,7 +195,7 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
     
-    put:
+    patch:
       tags:
         - record
       summary: Обновить запись на приём
@@ -213,6 +213,23 @@ paths:
           description: Запись с указанными параметрами не найдена
         '405':
           description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+    get:
+      tags:
+        - record
+      summary: Получить список записей
+      operationId: getRecordsList
+      responses:
+        '200':
+          description: Список записей получен
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Record' 
         '500':
           description: Внутренняя ошибка работы сервера
     
