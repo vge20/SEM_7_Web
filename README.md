@@ -52,13 +52,29 @@ BPMN диаграммы для пользователя.\
 <br/><br/>
 Меню администратора:
 <br/><br/>
-![alt text for png](img/adminMenu.png)
+![alt text for png](img/adminMenu.jpg)
 <br/><br/>
-Меню пользователя:
+Меню пациента:
 <br/><br/>
-![alt text for png](img/userMenu.png)
+![alt text for png](img/patientMenu.jpg)
 <br/><br/>
 Меню незарегистрированного пользователя:
 <br/><br/>
-![alt text for png](img/unregMenu.png)
+![alt text for png](img/unregMenu.jpg)
+<br/><br/>
+Страница с врачами:
+<br/><br/>
+![alt text for png](img/doctors.jpg)
+<br/><br/>
+Страница с пользователями:
+<br/><br/>
+![alt text for png](img/patients.jpg)
+<br/><br/>
+Страница с записями:
+<br/><br/>
+![alt text for png](img/records.jpg)
+<br/><br/>
+Страница с своего аккаунта:
+<br/><br/>
+![alt text for png](img/myAccount.jpg)
 <br/><br/>
