@@ -12,28 +12,28 @@ externalDocs:
 servers:
   - url: https://localhost:8080/api/v1
 tags:
-  - name: doctor
+  - name: doctors
     description: Операции с врачами клиники
-  - name: patient
+  - name: patients
     description: Операции с пациентами клиники
-  - name: admin
+  - name: admins
     description: Операции с администраторами клиники
-  - name: record
+  - name: records
     description: Операции с записями пользователей на приём к врачам
     
 paths:
   
-  /doctor:        
+  /doctors:        
     post:
       tags:
-        - doctor
+        - doctors
       summary: Добавить нового врача
       operationId: addDoctor
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doctor'
+              $ref: '#/components/schemas/Doctors'
         required: true
       responses:
         '201':
@@ -47,7 +47,7 @@ paths:
           
     get:
       tags:
-        - doctor
+        - doctors
       summary: Получить список врачей
       operationId: getDoctorsList
       parameters:
@@ -65,16 +65,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Doctor' 
+                  $ref: '#/components/schemas/Doctors' 
         '403':
           description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
           
-  /doctor/{id}:
+  /doctors/{id}:
     put:
       tags:
-        - doctor
+        - doctors
       summary: Обновить существующего врача
       operationId: updateDoctor
       parameters:
@@ -88,7 +88,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doctor'
+              $ref: '#/components/schemas/Doctors'
         required: true
       responses:
         '200':
@@ -104,7 +104,7 @@ paths:
   
     delete:
       tags:
-        - doctor
+        - doctors
       summary: Удалить существующего врача
       operationId: deleteDoctor
       parameters:
@@ -127,7 +127,7 @@ paths:
           description: Внутренняя ошибка работы сервера
     get:
       tags:
-        - doctor
+        - doctors
       summary: Получить врача
       operationId: getDoctor
       parameters:
@@ -143,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: '#/components/schemas/Doctors'
         '403':
           description: Недостаточно прав
         '404':
@@ -153,10 +153,10 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /record:
+  /records:
     delete:
       tags:
-        - record
+        - records
       summary: Удалить запись на приём
       operationId: deleteRecord
       parameters:
@@ -204,14 +204,14 @@ paths:
     
     post:
       tags:
-        - record
+        - records
       summary: Добавить запись на приём
       operationId: addRecord
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Record'
+              $ref: '#/components/schemas/Records'
         required: true
       responses:
         '201':
@@ -225,7 +225,7 @@ paths:
           
     get:
       tags:
-        - record
+        - records
       summary: Получить список записей
       operationId: getRecordsList
       parameters:
@@ -255,16 +255,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Record' 
+                  $ref: '#/components/schemas/Records' 
         '403':
           description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /record{doctorId}:
+  /records/{doctorId}:
     patch:
       tags:
-        - record
+        - records
       summary: Обновить запись на приём
       operationId: updateRecord
       parameters:
@@ -278,7 +278,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Record'
+              $ref: '#/components/schemas/Records'
         required: true
       responses:
         '200':
@@ -292,10 +292,10 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
     
-  /patient/{login}:
+  /patients/{login}:
     get:
       tags:
-        - patient
+        - patients
       summary: Получить пациента по логину
       operationId: getPatientByLogin
       parameters:
@@ -311,7 +311,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patient'
+                $ref: '#/components/schemas/Patients'
         '403':
           description: Недостаточно прав
         '404':
@@ -323,7 +323,7 @@ paths:
     
     delete:
       tags:
-        - patient
+        - patients
       summary: Удалить пациента по логину
       operationId: deletePatientByLogin
       parameters:
@@ -347,7 +347,7 @@ paths:
           
     put:
       tags:
-        - patient
+        - patients
       summary: Обновить пациента
       operationId: updatePatient
       parameters:
@@ -361,7 +361,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patient'
+              $ref: '#/components/schemas/Patients'
         required: true
       responses:
         '200':
@@ -375,17 +375,17 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
     
-  /patient:
+  /patients:
     post:
       tags:
-        - patient
+        - patients
       summary: Добавить пациента
       operationId: addPatient
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patient'
+              $ref: '#/components/schemas/Patients'
         required: true
       responses:
         '201':
@@ -399,7 +399,7 @@ paths:
   
     get:
       tags:
-        - patient
+        - patients
       summary: Получить список пациентов
       operationId: getPatientsList
       parameters:
@@ -417,23 +417,23 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Patient' 
+                  $ref: '#/components/schemas/Patients' 
         '403':
           description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /admin:        
+  /admins:        
     put:
       tags:
-        - admin
+        - admins
       summary: Обновить администратора
       operationId: updateAdmin
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Admin'
+              $ref: '#/components/schemas/Admins'
         required: true
       responses:
         '200':
@@ -447,10 +447,10 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
           
-  /authentication:
+  /authentications:
     post:
       tags:
-        - authentication
+        - authentications
       summary: Аутентификация
       operationId: authentification
       requestBody:
@@ -474,7 +474,7 @@ paths:
 components:
   schemas:
   
-    Doctor:
+    Doctors:
       type: object
       properties:
         id:
@@ -493,7 +493,7 @@ components:
           type: string
           example: surgeon
           
-    Record:
+    Records:
       type: object
       properties:
         id:
@@ -515,7 +515,7 @@ components:
           type: string
           example: '16:30:00'  
     
-    Patient:
+    Patients:
       type: object
       properties:
         id:
@@ -546,7 +546,7 @@ components:
           type: integer
           example: 1
     
-    Admin:
+    Admins:
       type: object
       properties:
         id:
