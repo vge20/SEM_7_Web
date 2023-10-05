@@ -22,31 +22,8 @@ tags:
     description: Операции с записями пользователей на приём к врачам
     
 paths:
-
-  /doctor:
-    put:
-      tags:
-        - doctor
-      summary: Обновить существующего врача
-      operationId: updateDoctor
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Doctor'
-        required: true
-      responses:
-        '200':
-          description: Врач обновлён
-        '403':
-          description: Недостаточно прав
-        '404':
-          description: Врач с указанным идентификатором не найден
-        '400':
-          description: Невалидные данные
-        '500':
-          description: Внутренняя ошибка работы сервера
-          
+  
+  /doctor:        
     post:
       tags:
         - doctor
@@ -95,6 +72,36 @@ paths:
           description: Внутренняя ошибка работы сервера
           
   /doctor/{id}:
+    put:
+      tags:
+        - doctor
+      summary: Обновить существующего врача
+      operationId: updateDoctor
+      parameters:
+        - name: id
+          in: path
+          description: Id врача
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Doctor'
+        required: true
+      responses:
+        '200':
+          description: Врач обновлён
+        '403':
+          description: Недостаточно прав
+        '404':
+          description: Врач с указанным идентификатором не найден
+        '400':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+  
     delete:
       tags:
         - doctor
@@ -215,29 +222,6 @@ paths:
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
-    
-    patch:
-      tags:
-        - record
-      summary: Обновить запись на приём
-      operationId: updateRecord
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Record'
-        required: true
-      responses:
-        '200':
-          description: Запись обновлена
-        '403':
-          description: Недостаточно прав
-        '404':
-          description: Запись с указанными параметрами не найдена
-        '400':
-          description: Невалидные данные
-        '500':
-          description: Внутренняя ошибка работы сервера
           
     get:
       tags:
@@ -274,6 +258,37 @@ paths:
                   $ref: '#/components/schemas/Record' 
         '403':
           description: Недостаточно прав
+        '500':
+          description: Внутренняя ошибка работы сервера
+  
+  /record{doctorId}:
+    patch:
+      tags:
+        - record
+      summary: Обновить запись на приём
+      operationId: updateRecord
+      parameters:
+        - name: doctorId
+          in: path
+          description: Id врача
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Record'
+        required: true
+      responses:
+        '200':
+          description: Запись обновлена
+        '403':
+          description: Недостаточно прав
+        '404':
+          description: Запись с указанными параметрами не найдена
+        '400':
+          description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
     
@@ -329,6 +344,36 @@ paths:
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
+          
+    put:
+      tags:
+        - patient
+      summary: Обновить пациента
+      operationId: updatePatient
+      parameters:
+        - name: login
+          in: path
+          description: Логин пациента
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
+      responses:
+        '200':
+          description: Пациент обновлён
+        '403':
+          description: Недостаточно прав
+        '404':
+          description: Пациент с указанными параметрами не найден
+        '400':
+          description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
     
   /patient:
     post:
@@ -347,29 +392,6 @@ paths:
           description: Пациент добавлен
         '403':
           description: Недостаточно прав
-        '400':
-          description: Невалидные данные
-        '500':
-          description: Внутренняя ошибка работы сервера
-          
-    put:
-      tags:
-        - patient
-      summary: Обновить пациента
-      operationId: updatePatient
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
-        required: true
-      responses:
-        '200':
-          description: Пациент обновлён
-        '403':
-          description: Недостаточно прав
-        '404':
-          description: Пациент с указанными параметрами не найден
         '400':
           description: Невалидные данные
         '500':
