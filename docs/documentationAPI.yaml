@@ -38,9 +38,11 @@ paths:
       responses:
         '200':
           description: Врач обновлён
+        '403':
+          description: Недостаточно прав
         '404':
           description: Врач с указанным идентификатором не найден
-        '405':
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -59,7 +61,9 @@ paths:
       responses:
         '201':
           description: Врач добавлен
-        '405':
+        '403':
+          description: Недостаточно прав
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -85,6 +89,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Doctor' 
+        '403':
+          description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
           
@@ -104,9 +110,11 @@ paths:
       responses:
         '200':
           description: Врач удалён
+        '403':
+          description: Недостаточно прав
         '404':
           description: Врач с указанным идентификатором не найден
-        '405':
+        '400':
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
@@ -129,9 +137,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Doctor'
+        '403':
+          description: Недостаточно прав
         '404':
           description: Врач с указанным идентификатором не найден
-        '405':
+        '400':
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
@@ -176,10 +186,12 @@ paths:
       responses:
         '200':
           description: Запись удалена
+        '403':
+          description: Недостаточно прав
         '404':
           description: Запись с указанными параметрами не найдена
-        '405':
-          description: Невалидные параметры 
+        '400':
+          description: Невалидные данные 
         '500':
           description: Внутренняя ошибка работы сервера
     
@@ -197,7 +209,9 @@ paths:
       responses:
         '201':
           description: Запись добавлена
-        '405':
+        '403':
+          description: Недостаточно прав
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -216,9 +230,11 @@ paths:
       responses:
         '200':
           description: Запись обновлена
+        '403':
+          description: Недостаточно прав
         '404':
           description: Запись с указанными параметрами не найдена
-        '405':
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -256,6 +272,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Record' 
+        '403':
+          description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
     
@@ -279,9 +297,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Patient'
+        '403':
+          description: Недостаточно прав
         '404':
           description: Пациент с указанным логином не найден
-        '405':
+        '400':
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
@@ -301,9 +321,11 @@ paths:
       responses:
         '200':
           description: Пациент удалён
+        '403':
+          description: Недостаточно прав
         '404':
           description: Пациент с указанным логином не найден
-        '405':
+        '400':
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
@@ -323,9 +345,11 @@ paths:
       responses:
         '200':
           description: Аутентификация успешна
+        '403':
+          description: Недостаточно прав
         '404':
           description: Пациент с указанным логином и паролем не найден
-        '405':
+        '400':
           description: Невалидные параметры 
         '500':
           description: Внутренняя ошибка работы сервера
@@ -345,7 +369,9 @@ paths:
       responses:
         '201':
           description: Пациент добавлен
-        '405':
+        '403':
+          description: Недостаточно прав
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -364,9 +390,11 @@ paths:
       responses:
         '200':
           description: Пациент обновлён
+        '403':
+          description: Недостаточно прав
         '404':
           description: Пациент с указанными параметрами не найден
-        '405':
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
@@ -392,6 +420,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Patient' 
+        '403':
+          description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
           
@@ -410,9 +440,11 @@ paths:
       responses:
         '200':
           description: Аутентификация успешна
+        '403':
+          description: Недостаточно прав
         '404':
           description: Администратор с указанным логином и паролем не найден
-        '405':
+        '400':
           description: Невалидные параметры 
         '500':
           description: Внутренняя ошибка работы сервера
@@ -432,9 +464,11 @@ paths:
       responses:
         '200':
           description: Администратор обновлён
+        '403':
+          description: Недостаточно прав
         '404':
           description: Администратор с указанными параметрами не найден
-        '405':
+        '400':
           description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
