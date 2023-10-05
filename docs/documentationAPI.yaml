@@ -329,30 +329,6 @@ paths:
           description: Невалидный id  
         '500':
           description: Внутренняя ошибка работы сервера
-          
-  /patient/authentification:
-    post:
-      tags:
-        - patient
-      summary: Аутентификация пациента
-      operationId: authentificationPatient
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Patient'
-        required: true
-      responses:
-        '200':
-          description: Аутентификация успешна
-        '403':
-          description: Недостаточно прав
-        '404':
-          description: Пациент с указанным логином и паролем не найден
-        '400':
-          description: Невалидные параметры 
-        '500':
-          description: Внутренняя ошибка работы сервера
     
   /patient:
     post:
@@ -424,30 +400,6 @@ paths:
           description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
-          
-  /admin/authentification:
-    post:
-      tags:
-        - admin
-      summary: Аутентификация администратора
-      operationId: authentificationAdmin
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Admin'
-        required: true
-      responses:
-        '200':
-          description: Аутентификация успешна
-        '403':
-          description: Недостаточно прав
-        '404':
-          description: Администратор с указанным логином и паролем не найден
-        '400':
-          description: Невалидные параметры 
-        '500':
-          description: Внутренняя ошибка работы сервера
   
   /admin:        
     put:
@@ -470,6 +422,30 @@ paths:
           description: Администратор с указанными параметрами не найден
         '400':
           description: Невалидные данные
+        '500':
+          description: Внутренняя ошибка работы сервера
+          
+  /authentication:
+    post:
+      tags:
+        - authentication
+      summary: Аутентификация
+      operationId: authentification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationParameters'
+        required: true
+      responses:
+        '200':
+          description: Аутентификация успешна
+        '403':
+          description: Недостаточно прав
+        '404':
+          description: Администратор/пользователь с указанным логином и паролем не найден
+        '400':
+          description: Невалидные параметры 
         '500':
           description: Внутренняя ошибка работы сервера
             
@@ -572,4 +548,13 @@ components:
         birthDate:
           type: string
           example: 1997-07-02
-    
+  
+    AuthenticationParameters:
+      type: object
+      properties:
+        login:
+          type: string
+          example: ivan1996
+        password:
+          type: string
+          example: qwerty
