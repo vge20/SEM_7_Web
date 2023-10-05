@@ -282,32 +282,21 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
           
-  /patient:
-    get:
+  /patient/authentification:
+    post:
       tags:
         - patient
-      summary: Получить пациента по логину и паролю
-      operationId: getPatientByLoginAndPassword
-      parameters:
-        - name: login
-          in: query
-          description: Логин пациента
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: Пароль пациента
-          required: true
-          schema:
-            type: string
+      summary: Аутентификация пациента
+      operationId: authentificationPatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patient'
+        required: true
       responses:
         '200':
-          description: Пациент получен
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Patient'
+          description: Аутентификация успешна
         '404':
           description: Пациент с указанным логином и паролем не найден
         '405':
@@ -315,6 +304,7 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
     
+  /patient:
     post:
       tags:
         - patient
@@ -355,7 +345,6 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /patient/all:
     get:
       tags:
         - patient
@@ -373,39 +362,29 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
           
-  /admin:
-    get:
+  /admin/authentification:
+    post:
       tags:
         - admin
-      summary: Получить администратора по логину и паролю
-      operationId: getAdminByLoginAndPassword
-      parameters:
-        - name: login
-          in: query
-          description: Логин администратора
-          required: true
-          schema:
-            type: string
-        - name: password
-          in: query
-          description: Пароль администратора
-          required: true
-          schema:
-            type: string
+      summary: Аутентификация администратора
+      operationId: authentificationAdmin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+        required: true
       responses:
         '200':
-          description: Администратор получен
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Admin'
+          description: Аутентификация успешна
         '404':
           description: Администратор с указанным логином и паролем не найден
         '405':
           description: Невалидные параметры 
         '500':
           description: Внутренняя ошибка работы сервера
-          
+  
+  /admin:        
     put:
       tags:
         - admin
