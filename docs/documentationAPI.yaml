@@ -69,6 +69,13 @@ paths:
         - doctor
       summary: Получить список врачей
       operationId: getDoctorsList
+      parameters:
+        - name: specialization
+          in: query
+          description: Специализация врача
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Список врачей получен
@@ -221,6 +228,25 @@ paths:
         - record
       summary: Получить список записей
       operationId: getRecordsList
+      parameters:
+        - name: patientLogin
+          in: query
+          description: Логин пациента
+          required: true
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          description: Дата начала
+          required: true
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          description: Дата конца
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Список записей получен
@@ -350,6 +376,13 @@ paths:
         - patient
       summary: Получить список пациентов
       operationId: getPatientsList
+      parameters:
+        - name: gender
+          in: query
+          description: Пол пациента
+          required: true
+          schema:
+            type: boolean
       responses:
         '200':
           description: Список пациентов получен
