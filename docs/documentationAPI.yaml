@@ -40,6 +40,8 @@ paths:
           description: Врач добавлен
         '403':
           description: Недостаточно прав
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -53,10 +55,22 @@ paths:
       parameters:
         - name: specialization
           in: query
-          description: Специализация врача
+          description: Специализация врачей
           required: true
           schema:
             type: string
+        - name: limit
+          in: query
+          description: Лимит количества врачей для возврата
+          required: true
+          schema:
+            type: integer
+        - name: skiped
+          in: query
+          description: Сдвиг возврата в коллекции врачей
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Список врачей получен
@@ -97,6 +111,8 @@ paths:
           description: Недостаточно прав
         '404':
           description: Врач с указанным идентификатором не найден
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -218,6 +234,8 @@ paths:
           description: Запись добавлена
         '403':
           description: Недостаточно прав
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -247,6 +265,18 @@ paths:
           required: true
           schema:
             type: string
+        - name: limit
+          in: query
+          description: Лимит количества записей для возврата
+          required: true
+          schema:
+            type: integer
+        - name: skiped
+          in: query
+          description: Сдвиг возврата в коллекции записей
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Список записей получен
@@ -261,16 +291,16 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /records/{doctorId}:
+  /records/{id}:
     patch:
       tags:
         - records
       summary: Обновить запись на приём
       operationId: updateRecord
       parameters:
-        - name: doctorId
+        - name: id
           in: path
-          description: Id врача
+          description: Id записи
           required: true
           schema:
             type: integer
@@ -287,6 +317,8 @@ paths:
           description: Недостаточно прав
         '404':
           description: Запись с указанными параметрами не найдена
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -370,6 +402,8 @@ paths:
           description: Недостаточно прав
         '404':
           description: Пациент с указанными параметрами не найден
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -392,6 +426,8 @@ paths:
           description: Пациент добавлен
         '403':
           description: Недостаточно прав
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
@@ -409,6 +445,24 @@ paths:
           required: true
           schema:
             type: boolean
+        - name: substr
+          in: query
+          description: Подстрока в логине пациента
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Лимит количества пациентов для возврата
+          required: true
+          schema:
+            type: integer
+        - name: skiped
+          in: query
+          description: Сдвиг возврата в коллекции пациентов
+          required: true
+          schema:
+            type: integer
       responses:
         '200':
           description: Список пациентов получен
@@ -423,12 +477,19 @@ paths:
         '500':
           description: Внутренняя ошибка работы сервера
   
-  /admins:        
+  /admins/{id}:        
     put:
       tags:
         - admins
       summary: Обновить администратора
       operationId: updateAdmin
+      parameters:
+        - name: id
+          in: path
+          description: Id администратора
+          required: true
+          schema:
+            type: integer
       requestBody:
         content:
           application/json:
@@ -442,6 +503,8 @@ paths:
           description: Недостаточно прав
         '404':
           description: Администратор с указанными параметрами не найден
+        '409':
+          description: Конфликт
         '400':
           description: Невалидные данные
         '500':
