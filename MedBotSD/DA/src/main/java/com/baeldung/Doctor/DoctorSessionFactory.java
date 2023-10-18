@@ -16,7 +16,7 @@ public class DoctorSessionFactory {
         if (sessionFactory == null) {
             try {
                 Properties props = new Properties();
-                FileInputStream in = new FileInputStream("src/main/resources/config.properties");
+                FileInputStream in = new FileInputStream("C:/SEM_7_Web/SEM_7_Web/MedBotSD/src/main/resources/config.properties");
                 props.load(in);
                 Configuration configuration = new Configuration().configure()
                         .setProperty("hibernate.connection.username", props.getProperty("db_username"))

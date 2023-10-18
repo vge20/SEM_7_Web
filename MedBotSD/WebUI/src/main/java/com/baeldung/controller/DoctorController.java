@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 public class DoctorController {
@@ -27,7 +28,8 @@ public class DoctorController {
     @GetMapping("/doctors")
     protected ResponseEntity<Object> doGet(@RequestParam String specialization,
                                            @RequestParam int limit, @RequestParam int skipped) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<Doctor> doctorsList = doctorService.getDoctorsList(specialization, limit, skipped);
+        return new ResponseEntity<>(doctorsList, HttpStatus.OK);
     }
 
     @PostMapping("/doctors")

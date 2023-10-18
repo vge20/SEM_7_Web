@@ -128,8 +128,8 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
-    public ArrayList<Doctor> getDoctorsList() {
-        ArrayList<Doctor> arrDoctors = getDoctorRep.getDoctorsList();
+    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
+        ArrayList<Doctor> arrDoctors = getDoctorRep.getDoctorsList(specialization, limit, skipped);
 
         if (arrDoctors != null && arrDoctors.size() != 0)
             logger.info("Получен список из " + arrDoctors.size() + " докторов");

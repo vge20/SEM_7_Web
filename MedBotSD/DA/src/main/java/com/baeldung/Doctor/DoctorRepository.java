@@ -59,11 +59,11 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     }
 
     @Override
-    public ArrayList<Doctor> getDoctorsList() {
+    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
         ArrayList<DoctorDAModel> arrDoctorDAModels;
         try {
             arrDoctorDAModels = (ArrayList<DoctorDAModel>) DoctorSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from DoctorDAModel").list();
+                    .openSession().createQuery("from DoctorDAModel where specialization = " + specialization).list();
         } catch (Exception e) {
             throw e;
         }
@@ -71,7 +71,7 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
         ArrayList<Doctor> arrDoctors;
         if (arrDoctorDAModels.size() != 0) {
             arrDoctors = new ArrayList<>(0);
-            for (int i = 0; i < arrDoctorDAModels.size(); i++) {
+            for (int i = skipped; i < arrDoctorDAModels.size() && i < skipped + limit; i++) {
                 arrDoctors.add(new Doctor(arrDoctorDAModels.get(i).getId(), arrDoctorDAModels.get(i).getFirstName(),
                         arrDoctorDAModels.get(i).getLastName(), arrDoctorDAModels.get(i).getGender(),
                         arrDoctorDAModels.get(i).getSpecialization()));
