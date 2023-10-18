@@ -30,8 +30,10 @@
     <module>BL</module>
         
     <module>TI</module>
-    
+
     <module>UI</module>
+
+    <module>WebUI</module>
 
   </modules>
     
