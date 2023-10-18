@@ -44,6 +44,6 @@ public class DoctorController {
 
     @PutMapping("/doctors/{id}")
     protected ResponseEntity<Object> doPut(@PathVariable int id, @RequestBody Doctor doctor) {
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
