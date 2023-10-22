@@ -1,11 +1,17 @@
 package com.baeldung.Doctor;
 
+import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 
 public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository {
+
     @Override
     public Boolean addDoctor(Doctor doctor) {
         DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getFirstName(), doctor.getLastName(),
@@ -61,9 +67,27 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     @Override
     public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
         ArrayList<DoctorDAModel> arrDoctorDAModels;
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres");
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
         try {
-            arrDoctorDAModels = (ArrayList<DoctorDAModel>) DoctorSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from DoctorDAModel where specialization = " + specialization).list();
+            //arrDoctorDAModels = (ArrayList<DoctorDAModel>) new HiberConfig().sessionFactory()
+            //        .openSession().createQuery("from DoctorDAModel where specialization = " + specialization).list();
+            arrDoctorDAModels = (ArrayList<DoctorDAModel>) jdbcTemplate
+                    .query("select * from doctors where specialization = " + specialization,
+                    (resultSet, rowNum) -> {
+                DoctorDAModel doctorDAModel = new DoctorDAModel();
+                doctorDAModel.setId(resultSet.getInt("id"));
+                doctorDAModel.setGender(resultSet.getBoolean("gender"));
+                doctorDAModel.setFirstName(resultSet.getString("firstName"));
+                doctorDAModel.setLastName(resultSet.getString("lastName"));
+                doctorDAModel.setSpecialization(resultSet.getString("specialization"));
+                return doctorDAModel;
+                    });
         } catch (Exception e) {
             throw e;
         }
