@@ -34,8 +34,8 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
                 doctor.getGender(), doctor.getSpecialization());
 
         Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("update doctors" +
-                "set firstName = ?, lastName = ?, gender = ?, specialization = ?" +
+        PreparedStatement statement = connection.prepareStatement("update doctors " +
+                "set firstName = ?, lastName = ?, gender = ?, specialization = ? " +
                 "where id = ?");
         statement.setString(1, doctorDAModel.getFirstName());
         statement.setString(2, doctorDAModel.getLastName());
@@ -52,7 +52,7 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     @Override
     public Boolean deleteDoctor(int id) throws Exception {
         Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("delete from doctors" +
+        PreparedStatement statement = connection.prepareStatement("delete from doctors " +
                 "where id = ?");
         statement.setInt(1, id);
 

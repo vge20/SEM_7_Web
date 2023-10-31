@@ -39,7 +39,12 @@ class ScheduleRepositoryTest {
         session.close();
 
         ScheduleRepository scheduleRepository = new ScheduleRepository();
-        Schedule TEST_SCHEDULE = scheduleRepository.getSchedule(TEST_DOCTOR_DAM.getId());
+        Schedule TEST_SCHEDULE = null;
+        try {
+            TEST_SCHEDULE = scheduleRepository.getSchedule(TEST_DOCTOR_DAM.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         session = ScheduleSessionFactory.getSessionFactory().openSession();
         transaction = session.beginTransaction();
@@ -75,7 +80,12 @@ class ScheduleRepositoryTest {
         session.close();
 
         ScheduleRepository scheduleRepository = new ScheduleRepository();
-        boolean res = scheduleRepository.deleteSchedule(TEST_SCHEDULE_DAM.getId());
+        boolean res = false;
+        try {
+            res = scheduleRepository.deleteSchedule(TEST_SCHEDULE_DAM.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         session = DoctorSessionFactory.getSessionFactory().openSession();
         transaction = session.beginTransaction();
