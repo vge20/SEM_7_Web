@@ -1,5 +1,6 @@
 package com.baeldung.Record;
 
+import com.baeldung.Doctor.Doctor;
 import com.baeldung.Doctor.IGetDoctorRepository;
 import com.baeldung.Schedule.*;
 import com.baeldung.Schedule.IScheduleRepository;
@@ -8,6 +9,7 @@ import com.baeldung.User.IGetUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.Doc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -49,13 +51,20 @@ public class RecordService implements IRecordService {
 
     @Override
     public Boolean addRecord(Record record) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(record.getIdDoctor());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         if (getUserRep.getUserById(record.getIdUser()) == null) {
             logger.info("Неудачаная попытка добавить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
             return false;
         }
-        else if (getDoctorRep.getDoctorById(record.getIdDoctor()) == null) {
+        else if (tmpDoctor == null) {
             logger.info("Неудачаная попытка добавить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
@@ -161,13 +170,20 @@ public class RecordService implements IRecordService {
 
     @Override
     public Boolean deleteRecord(Record record) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(record.getIdDoctor());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         if (getUserRep.getUserById(record.getIdUser()) == null) {
             logger.info("Неудачаная попытка удалить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
             return false;
         }
-        else if (getDoctorRep.getDoctorById(record.getIdDoctor()) == null) {
+        else if (tmpDoctor == null) {
             logger.info("Неудачаная попытка удалить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
@@ -201,6 +217,13 @@ public class RecordService implements IRecordService {
 
     @Override
     public Boolean updateRecord(Record record) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(record.getIdDoctor());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         if (getUserRep.getUserById(record.getIdUser()) == null) {
             logger.info("Неудачаная попытка обновить запись: id записи - " + record.getId() +  ", id доктора - " +
                     record.getIdDoctor() + ", id пользователя - " + record.getIdUser() + ", дата - " +
@@ -208,7 +231,7 @@ public class RecordService implements IRecordService {
                     record.getEndTime());
             return false;
         }
-        else if (getDoctorRep.getDoctorById(record.getIdDoctor()) == null) {
+        else if (tmpDoctor == null) {
             logger.info("Неудачаная попытка обновить запись: id записи - " + record.getId() +  ", id доктора - " +
                     record.getIdDoctor() + ", id пользователя - " + record.getIdUser() + ", дата - " +
                     record.getDate() + ", время начала - " + record.getStartTime() + ", время окончания - " +

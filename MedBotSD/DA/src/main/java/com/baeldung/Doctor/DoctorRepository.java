@@ -11,37 +11,44 @@ import java.util.ArrayList;
 
 public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository {
     @Override
-    public Boolean addDoctor(Doctor doctor) {
+    public Boolean addDoctor(Doctor doctor) throws Exception {
         DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getFirstName(), doctor.getLastName(),
                 doctor.getGender(), doctor.getSpecialization());
-        try {
-            Session session = DoctorSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.save(doctorDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
 
-        return true;
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("insert into " +
+                "Doctors(firstName, lastName, gender, specialization) values " +
+                "(?, ?, ?, ?)");
+        statement.setString(1, doctorDAModel.getFirstName());
+        statement.setString(2, doctorDAModel.getLastName());
+        statement.setBoolean(3, doctorDAModel.getGender());
+        statement.setString(4, doctorDAModel.getSpecialization());
+
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
-    public Boolean updateDoctor(Doctor doctor) {
-        DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getId(), doctor.getFirstName(), doctor.getLastName(),
+    public Boolean updateDoctor(Doctor doctor) throws Exception {
+        DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getFirstName(), doctor.getLastName(),
                 doctor.getGender(), doctor.getSpecialization());
-        try {
-            Session session = DoctorSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.update(doctorDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
 
-        return true;
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("update doctors" +
+                "set firstName = ?, lastName = ?, gender = ?, specialization = ?" +
+                "where id = ?");
+        statement.setString(1, doctorDAModel.getFirstName());
+        statement.setString(2, doctorDAModel.getLastName());
+        statement.setBoolean(3, doctorDAModel.getGender());
+        statement.setString(4, doctorDAModel.getSpecialization());
+        statement.setInt(5, doctorDAModel.getId());
+
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
@@ -133,13 +140,21 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     }
 
     @Override
-    public Doctor getDoctorById(int id) {
-        DoctorDAModel doctorDAModel;
+    public Doctor getDoctorById(int id) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from doctors " +
+                "where id = ?");
+        statement.setInt(1, id);
+        ResultSet queryRes = statement.executeQuery();
 
-        try {
-            doctorDAModel = DoctorSessionFactory.getSessionFactory().openSession().get(DoctorDAModel.class, id);
-        } catch (Exception e) {
-            throw e;
+        DoctorDAModel doctorDAModel = null;
+        if (queryRes.next()) {
+            doctorDAModel = new DoctorDAModel();
+            doctorDAModel.setId(queryRes.getInt("id"));
+            doctorDAModel.setFirstName(queryRes.getString("firstName"));
+            doctorDAModel.setLastName(queryRes.getString("lastName"));
+            doctorDAModel.setGender(queryRes.getBoolean("gender"));
+            doctorDAModel.setSpecialization(queryRes.getString("specialization"));
         }
 
         Doctor doctor;

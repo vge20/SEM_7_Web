@@ -44,7 +44,12 @@ class DoctorRepositoryTest {
         session.close();
 
         DoctorRepository doctorRepository = new DoctorRepository();
-        Doctor TEST_DOCTOR = doctorRepository.getDoctorById(TEST_DOCTOR_DAM.getId());
+        Doctor TEST_DOCTOR = null;
+        try {
+            TEST_DOCTOR = doctorRepository.getDoctorById(TEST_DOCTOR_DAM.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.println(TEST_DOCTOR_DAM.getId());
         session = DoctorSessionFactory.getSessionFactory().openSession();
         transaction = session.beginTransaction();

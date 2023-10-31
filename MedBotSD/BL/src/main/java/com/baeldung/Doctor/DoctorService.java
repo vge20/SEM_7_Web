@@ -6,6 +6,7 @@ import com.baeldung.Schedule.Schedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.print.Doc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -51,7 +52,12 @@ public class DoctorService implements IDoctorService {
             return false;
         }
 
-        boolean res = doctorRep.addDoctor(doctor);
+        boolean res = false;
+        try {
+            res = doctorRep.addDoctor(doctor);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res) {
             doctor = getDoctorRep.getDoctorByParameters(doctor.getFirstName(), doctor.getLastName(),
@@ -84,7 +90,14 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public Boolean deleteDoctor(int id) {
-        if (getDoctorRep.getDoctorById(id) == null) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (tmpDoctor == null) {
             logger.info("Неудачная попытка удалить пользователя: идентификатор - " + id);
             return false;
         }
@@ -106,14 +119,26 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public Boolean updateDoctor(Doctor doctor) {
-        if (getDoctorRep.getDoctorById(doctor.getId()) == null) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(doctor.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (tmpDoctor == null) {
             logger.info("Неудачная попытка обновить пользователя: идентификатор - " + doctor.getId() + ", " +
                     doctor.getFirstName() + ", " + doctor.getLastName() + ", пол - " + doctor.getGender() +
                     ", специализация - " + doctor.getSpecialization());
             return false;
         }
 
-        Boolean res = doctorRep.updateDoctor(doctor);
+        Boolean res = null;
+        try {
+            res = doctorRep.updateDoctor(doctor);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Обновлён пользователь: идентификатор - " + doctor.getId() + ", " +
@@ -156,9 +181,26 @@ public class DoctorService implements IDoctorService {
         if (arrDoctors != null && arrDoctors.size() != 0)
             logger.info("Получен список из " + arrDoctors.size() + " докторов");
         else
-            logger.info("Неудачная поптыка получить список пользователей");
+            logger.info("Неудачная поптыка получить список докторов");
 
         return arrDoctors;
+    }
+
+    @Override
+    public Doctor getDoctorById(int id) {
+        Doctor doctor;
+        try {
+            doctor = getDoctorRep.getDoctorById(id);
+        } catch (Exception e) {
+            doctor = null;
+        }
+
+        if (doctor != null)
+            logger.info("Получен доктор");
+        else
+            logger.info("Неудачная поптыка получить доктора");
+
+        return doctor;
     }
 }
 

@@ -6,10 +6,9 @@ import com.baeldung.config.AppConfig;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,5 +39,33 @@ public class DoctorController {
                                            @RequestParam int skipped) {
         List<Doctor> doctorsList = doctorService.getDoctorsList(specialization, limit, skipped);
         return new ResponseEntity<>(doctorsList, generateHttpHeaders(), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/v1/doctors/{id}")
+    protected ResponseEntity<Object> doGet(@PathVariable int id) {
+        Doctor doctor = doctorService.getDoctorById(id);
+        return new ResponseEntity<>(doctor, generateHttpHeaders(), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v1/doctors")
+    protected ResponseEntity<Object> doPost(@RequestBody Doctor doctor) {
+        System.out.println("AAA");
+        if (doctorService.addDoctor(doctor)) {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/api/v1/doctors/{id}")
+    protected ResponseEntity<Object> doPut(@RequestBody Doctor doctor, @PathVariable int id) {
+        doctor.setId(id);
+        if (doctorService.updateDoctor(doctor)) {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
