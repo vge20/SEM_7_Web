@@ -8,7 +8,12 @@ import java.util.ArrayList;
 
 public class DoctorRepositoryMock implements IGetDoctorRepository, IDoctorRepository {
 
-    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
+    public ArrayList<Doctor> getDoctorsList() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) throws Exception {
         return null;
     }
 

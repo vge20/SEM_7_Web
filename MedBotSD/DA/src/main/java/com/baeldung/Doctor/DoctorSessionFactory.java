@@ -16,13 +16,9 @@ public class DoctorSessionFactory {
         if (sessionFactory == null) {
             try {
                 Properties props = new Properties();
-                FileInputStream in = new FileInputStream("C:/SEM_7_Web/SEM_7_Web/MedBotSD/src/main/resources/config.properties");
+                FileInputStream in = new FileInputStream("src/main/resources/config.properties");
                 props.load(in);
-                Configuration configuration = new Configuration()
-                        .setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
-                        .setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5432/postgres")
-                        .setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect")
-                        .setProperty("show_sql", "false")
+                Configuration configuration = new Configuration().configure()
                         .setProperty("hibernate.connection.username", props.getProperty("db_username"))
                         .setProperty("hibernate.connection.password", props.getProperty("db_password"));
                 configuration.addAnnotatedClass(DoctorDAModel.class);

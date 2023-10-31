@@ -3,6 +3,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+.allure/
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws
@@ -34,4 +36,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
+### Log ###
 *.log

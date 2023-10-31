@@ -42,10 +42,10 @@ public class AddRecordDoctorIdScanState extends State {
             ArrayList<Doctor> doctorsList;
             boolean flag = false;
             try {
-                //doctorsList = doctorService.getDoctorsList();
-                //for (int i = 0; i < doctorsList.size(); i++)
-                //    if (doctorsList.get(i).getId() == id)
-                //        flag = true;
+                doctorsList = doctorService.getDoctorsList();
+                for (int i = 0; i < doctorsList.size(); i++)
+                    if (doctorsList.get(i).getId() == id)
+                        flag = true;
             } catch (Exception e) {
                 logger.error("Ошибка " + e + " при получении списка врачей!");
             }

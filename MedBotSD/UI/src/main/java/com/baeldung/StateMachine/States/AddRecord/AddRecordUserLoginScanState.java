@@ -47,7 +47,7 @@ public class AddRecordUserLoginScanState extends State {
                 recordTmp.setIdUser(tmpUser.getId());
                 ArrayList<Doctor> doctorsList = null;
                 try {
-                    //doctorsList = doctorService.getDoctorsList();
+                    doctorsList = doctorService.getDoctorsList();
                 } catch (Exception e) {
                     logger.error("Ошибка " + e + " при получении списка врачей!");
                 }

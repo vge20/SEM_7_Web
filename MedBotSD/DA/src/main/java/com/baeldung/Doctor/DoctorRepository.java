@@ -1,17 +1,15 @@
 package com.baeldung.Doctor;
 
-import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
+import com.baeldung.DataSource.DataSource;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository {
-
     @Override
     public Boolean addDoctor(Doctor doctor) {
         DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getFirstName(), doctor.getLastName(),
@@ -65,37 +63,64 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     }
 
     @Override
-    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
-        ArrayList<DoctorDAModel> arrDoctorDAModels;
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("postgres");
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+    public ArrayList<Doctor> getDoctorsList() throws Exception {
+        ArrayList<DoctorDAModel> arrDoctorDAModels = new ArrayList<>();
 
-        try {
-            //arrDoctorDAModels = (ArrayList<DoctorDAModel>) new HiberConfig().sessionFactory()
-            //        .openSession().createQuery("from DoctorDAModel where specialization = " + specialization).list();
-            arrDoctorDAModels = (ArrayList<DoctorDAModel>) jdbcTemplate
-                    .query("select * from doctors where specialization = " + specialization,
-                    (resultSet, rowNum) -> {
-                DoctorDAModel doctorDAModel = new DoctorDAModel();
-                doctorDAModel.setId(resultSet.getInt("id"));
-                doctorDAModel.setGender(resultSet.getBoolean("gender"));
-                doctorDAModel.setFirstName(resultSet.getString("firstName"));
-                doctorDAModel.setLastName(resultSet.getString("lastName"));
-                doctorDAModel.setSpecialization(resultSet.getString("specialization"));
-                return doctorDAModel;
-                    });
-        } catch (Exception e) {
-            throw e;
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from doctors");
+        ResultSet queryRes = statement.executeQuery();
+
+        while (queryRes.next()) {
+            DoctorDAModel doctorDAModel = new DoctorDAModel();
+            doctorDAModel.setId(queryRes.getInt("id"));
+            doctorDAModel.setFirstName(queryRes.getString("firstName"));
+            doctorDAModel.setLastName(queryRes.getString("lastName"));
+            doctorDAModel.setGender(queryRes.getBoolean("gender"));
+            doctorDAModel.setSpecialization(queryRes.getString("specialization"));
+            arrDoctorDAModels.add(doctorDAModel);
         }
 
         ArrayList<Doctor> arrDoctors;
         if (arrDoctorDAModels.size() != 0) {
             arrDoctors = new ArrayList<>(0);
-            for (int i = skipped; i < arrDoctorDAModels.size() && i < skipped + limit; i++) {
+            for (int i = 0; i < arrDoctorDAModels.size(); i++) {
+                arrDoctors.add(new Doctor(arrDoctorDAModels.get(i).getId(), arrDoctorDAModels.get(i).getFirstName(),
+                        arrDoctorDAModels.get(i).getLastName(), arrDoctorDAModels.get(i).getGender(),
+                        arrDoctorDAModels.get(i).getSpecialization()));
+            }
+        }
+        else
+            arrDoctors = null;
+
+        return arrDoctors;
+    }
+
+    @Override
+    public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) throws Exception {
+        ArrayList<DoctorDAModel> arrDoctorDAModels = new ArrayList<>();
+
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from doctors " +
+                "where specialization = ? limit ? offset ?");
+        statement.setString(1, specialization);
+        statement.setInt(2, limit);
+        statement.setInt(3, skipped);
+        ResultSet queryRes = statement.executeQuery();
+
+        while (queryRes.next()) {
+            DoctorDAModel doctorDAModel = new DoctorDAModel();
+            doctorDAModel.setId(queryRes.getInt("id"));
+            doctorDAModel.setFirstName(queryRes.getString("firstName"));
+            doctorDAModel.setLastName(queryRes.getString("lastName"));
+            doctorDAModel.setGender(queryRes.getBoolean("gender"));
+            doctorDAModel.setSpecialization(queryRes.getString("specialization"));
+            arrDoctorDAModels.add(doctorDAModel);
+        }
+
+        ArrayList<Doctor> arrDoctors;
+        if (arrDoctorDAModels.size() != 0) {
+            arrDoctors = new ArrayList<>(0);
+            for (int i = 0; i < arrDoctorDAModels.size(); i++) {
                 arrDoctors.add(new Doctor(arrDoctorDAModels.get(i).getId(), arrDoctorDAModels.get(i).getFirstName(),
                         arrDoctorDAModels.get(i).getLastName(), arrDoctorDAModels.get(i).getGender(),
                         arrDoctorDAModels.get(i).getSpecialization()));

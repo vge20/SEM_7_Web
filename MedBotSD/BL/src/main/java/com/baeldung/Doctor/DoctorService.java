@@ -128,8 +128,30 @@ public class DoctorService implements IDoctorService {
     }
 
     @Override
+    public ArrayList<Doctor> getDoctorsList() {
+        ArrayList<Doctor> arrDoctors;
+        try {
+            arrDoctors = getDoctorRep.getDoctorsList();
+        } catch (Exception e) {
+            arrDoctors = null;
+        }
+
+        if (arrDoctors != null && arrDoctors.size() != 0)
+            logger.info("Получен список из " + arrDoctors.size() + " докторов");
+        else
+            logger.info("Неудачная поптыка получить список пользователей");
+
+        return arrDoctors;
+    }
+
+    @Override
     public ArrayList<Doctor> getDoctorsList(String specialization, int limit, int skipped) {
-        ArrayList<Doctor> arrDoctors = getDoctorRep.getDoctorsList(specialization, limit, skipped);
+        ArrayList<Doctor> arrDoctors;
+        try {
+            arrDoctors = getDoctorRep.getDoctorsList(specialization, limit, skipped);
+        } catch (Exception e) {
+            arrDoctors = null;
+        }
 
         if (arrDoctors != null && arrDoctors.size() != 0)
             logger.info("Получен список из " + arrDoctors.size() + " докторов");
