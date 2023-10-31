@@ -1,12 +1,10 @@
 package com.baeldung.Doctor;
 
-import com.baeldung.Schedule.*;
 import com.baeldung.Schedule.IScheduleRepository;
 import com.baeldung.Schedule.Schedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.Doc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;

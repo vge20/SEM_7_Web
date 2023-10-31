@@ -1,8 +1,6 @@
 package com.baeldung.Doctor;
 
 import com.baeldung.DataSource.DataSource;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -164,23 +162,31 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
 
     @Override
     public Doctor getDoctorByParameters(String firstName, String lastName,
-                                        Boolean gender, String specialization) {
-        ArrayList<DoctorDAModel> doctorDAModel;
+                                        Boolean gender, String specialization) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from doctors " +
+                "where firstName = ? and lastName = ? and gender = ? and specialization = ?");
+        statement.setString(1, firstName);
+        statement.setString(2, lastName);
+        statement.setBoolean(3, gender);
+        statement.setString(4, specialization);
+        ResultSet queryRes = statement.executeQuery();
 
-        try {
-            doctorDAModel = (ArrayList<DoctorDAModel>) DoctorSessionFactory.getSessionFactory().openSession().
-                    createQuery("from DoctorDAModel as m where m.firstName = '" + firstName + "' and m.lastName = '"
-                            + lastName + "' and m.gender = " + gender.toString() + " and m.specialization = '" +
-                            specialization + "'").list();
-        } catch (Exception e) {
-            throw e;
+        DoctorDAModel doctorDAModel = null;
+        if (queryRes.next()) {
+            doctorDAModel = new DoctorDAModel();
+            doctorDAModel.setId(queryRes.getInt("id"));
+            doctorDAModel.setFirstName(queryRes.getString("firstName"));
+            doctorDAModel.setLastName(queryRes.getString("lastName"));
+            doctorDAModel.setGender(queryRes.getBoolean("gender"));
+            doctorDAModel.setSpecialization(queryRes.getString("specialization"));
         }
 
         Doctor doctor;
-        if (doctorDAModel != null && doctorDAModel.size() != 0)
-            doctor = new Doctor(doctorDAModel.get(0).getId(), doctorDAModel.get(0).getFirstName(),
-                    doctorDAModel.get(0).getLastName(), doctorDAModel.get(0).getGender(),
-                    doctorDAModel.get(0).getSpecialization());
+        if (doctorDAModel != null)
+            doctor = new Doctor(doctorDAModel.getId(), doctorDAModel.getFirstName(),
+                    doctorDAModel.getLastName(), doctorDAModel.getGender(),
+                    doctorDAModel.getSpecialization());
         else
             doctor = null;
 

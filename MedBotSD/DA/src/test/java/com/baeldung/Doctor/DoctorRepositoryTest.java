@@ -25,7 +25,12 @@ class DoctorRepositoryTest {
         session.close();
 
         DoctorRepository doctorRepository = new DoctorRepository();
-        Boolean res = doctorRepository.deleteDoctor(TEST_DOCTOR_DAM.getId());
+        Boolean res = null;
+        try {
+            res = doctorRepository.deleteDoctor(TEST_DOCTOR_DAM.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         int countDoctorsInTable = DoctorSessionFactory.getSessionFactory().openSession()
                 .createQuery("from DoctorDAModel").list().size();
