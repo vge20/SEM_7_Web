@@ -52,21 +52,16 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
     }
 
     @Override
-    public Boolean deleteDoctor(int id) {
-        DoctorDAModel doctorDAModel = new DoctorDAModel();
-        doctorDAModel.setId(id);
+    public Boolean deleteDoctor(int id) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("delete from doctors" +
+                "where id = ?");
+        statement.setInt(1, id);
 
-        try {
-            Session session = DoctorSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.delete(doctorDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
-
-        return true;
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override

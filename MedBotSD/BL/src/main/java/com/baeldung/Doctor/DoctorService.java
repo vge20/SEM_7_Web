@@ -107,7 +107,12 @@ public class DoctorService implements IDoctorService {
             return false;
         }
 
-        Boolean res = doctorRep.deleteDoctor(id);
+        Boolean res = null;
+        try {
+            res = doctorRep.deleteDoctor(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Удалён пользователь: идентификатор - " + id);

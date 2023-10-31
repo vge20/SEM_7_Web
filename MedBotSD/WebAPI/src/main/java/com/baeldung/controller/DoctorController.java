@@ -60,8 +60,20 @@ public class DoctorController {
 
     @PutMapping("/api/v1/doctors/{id}")
     protected ResponseEntity<Object> doPut(@RequestBody Doctor doctor, @PathVariable int id) {
+        System.out.println("AAA");
         doctor.setId(id);
         if (doctorService.updateDoctor(doctor)) {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/api/v1/doctors/{id}")
+    protected ResponseEntity<Object> doDelete(@PathVariable int id) {
+        System.out.println("AAA");
+        if (doctorService.deleteDoctor(id)) {
             return new ResponseEntity<>(generateHttpHeaders(), HttpStatus.OK);
         }
         else {
