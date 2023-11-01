@@ -42,15 +42,21 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public Boolean addDoctor(Doctor doctor) {
-        if (getDoctorRep.getDoctorByParameters(doctor.getFirstName(), doctor.getLastName(),
-                doctor.getGender(), doctor.getSpecialization()) != null) {
+        Doctor tmpDoctor;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorByParameters(doctor.getFirstName(), doctor.getLastName(),
+                    doctor.getGender(), doctor.getSpecialization());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpDoctor != null) {
             logger.info("Неудачная попытка добавить пользователя: " + doctor.getFirstName() + ", " +
                     doctor.getLastName() + ", пол - " + doctor.getGender(), ", специализация - " +
                     doctor.getSpecialization());
             return false;
         }
 
-        boolean res = false;
+        boolean res;
         try {
             res = doctorRep.addDoctor(doctor);
         } catch (Exception e) {
@@ -58,8 +64,12 @@ public class DoctorService implements IDoctorService {
         }
 
         if (res) {
-            doctor = getDoctorRep.getDoctorByParameters(doctor.getFirstName(), doctor.getLastName(),
-                    doctor.getGender(), doctor.getSpecialization());
+            try {
+                doctor = getDoctorRep.getDoctorByParameters(doctor.getFirstName(), doctor.getLastName(),
+                        doctor.getGender(), doctor.getSpecialization());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             if (doctor == null) {
                 logger.info("Неудачная попытка добавить пользователя: " + doctor.getFirstName() + ", " +
                         doctor.getLastName() + ", пол - " + doctor.getGender(), ", специализация - " +
@@ -67,7 +77,12 @@ public class DoctorService implements IDoctorService {
                 return false;
             }
             Schedule schedule = new Schedule(doctor.getId());
-            if (!scheduleRep.addSchedule(schedule)) {
+            try {
+                res = scheduleRep.addSchedule(schedule);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if (!res) {
                 logger.info("Неудачная попытка добавить пользователя: " + doctor.getFirstName() + ", " +
                         doctor.getLastName() + ", пол - " + doctor.getGender(), ", специализация - " +
                         doctor.getSpecialization());
@@ -88,7 +103,7 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public Boolean deleteDoctor(int id) {
-        Doctor tmpDoctor = null;
+        Doctor tmpDoctor;
         try {
             tmpDoctor = getDoctorRep.getDoctorById(id);
         } catch (Exception e) {
@@ -100,12 +115,19 @@ public class DoctorService implements IDoctorService {
             return false;
         }
 
-        if (!scheduleRep.deleteSchedule(scheduleRep.getSchedule(id).getId())) {
+        boolean res;
+        try {
+            res = scheduleRep.deleteSchedule(scheduleRep.getSchedule(id).getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (!res) {
             logger.info("Неудачная попытка удалить пользователя: идентификатор - " + id);
             return false;
         }
 
-        Boolean res = null;
+        res = false;
         try {
             res = doctorRep.deleteDoctor(id);
         } catch (Exception e) {
@@ -122,7 +144,7 @@ public class DoctorService implements IDoctorService {
 
     @Override
     public Boolean updateDoctor(Doctor doctor) {
-        Doctor tmpDoctor = null;
+        Doctor tmpDoctor;
         try {
             tmpDoctor = getDoctorRep.getDoctorById(doctor.getId());
         } catch (Exception e) {
@@ -136,7 +158,7 @@ public class DoctorService implements IDoctorService {
             return false;
         }
 
-        Boolean res = null;
+        Boolean res;
         try {
             res = doctorRep.updateDoctor(doctor);
         } catch (Exception e) {

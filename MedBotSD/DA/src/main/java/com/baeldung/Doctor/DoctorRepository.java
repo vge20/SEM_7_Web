@@ -30,13 +30,12 @@ public class DoctorRepository implements IDoctorRepository, IGetDoctorRepository
 
     @Override
     public Boolean updateDoctor(Doctor doctor) throws Exception {
-        DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getFirstName(), doctor.getLastName(),
+        DoctorDAModel doctorDAModel = new DoctorDAModel(doctor.getId(), doctor.getFirstName(), doctor.getLastName(),
                 doctor.getGender(), doctor.getSpecialization());
 
         Connection connection = DataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement("update doctors " +
-                "set firstName = ?, lastName = ?, gender = ?, specialization = ? " +
-                "where id = ?");
+        PreparedStatement statement = connection.prepareStatement("update doctors set " +
+                "firstName = ?, lastName = ?, gender = ?, specialization = ? where id = ?");
         statement.setString(1, doctorDAModel.getFirstName());
         statement.setString(2, doctorDAModel.getLastName());
         statement.setBoolean(3, doctorDAModel.getGender());

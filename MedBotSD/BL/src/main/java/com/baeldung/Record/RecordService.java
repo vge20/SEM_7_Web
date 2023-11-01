@@ -2,14 +2,12 @@ package com.baeldung.Record;
 
 import com.baeldung.Doctor.Doctor;
 import com.baeldung.Doctor.IGetDoctorRepository;
-import com.baeldung.Schedule.*;
 import com.baeldung.Schedule.IScheduleRepository;
 import com.baeldung.Schedule.Schedule;
 import com.baeldung.User.IGetUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.Doc;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -82,7 +80,12 @@ public class RecordService implements IRecordService {
             return false;
         }
 
-        Schedule schedule = scheduleRep.getSchedule(record.getIdDoctor());
+        Schedule schedule;
+        try {
+            schedule = scheduleRep.getSchedule(record.getIdDoctor());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (record.getStartTime().compareTo(record.getEndTime()) >= 0) {
             logger.info("Неудачаная попытка добавить запись: id доктора - " + record.getIdDoctor() +
