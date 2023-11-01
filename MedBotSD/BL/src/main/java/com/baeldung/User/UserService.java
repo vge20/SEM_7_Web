@@ -36,10 +36,21 @@ public class UserService implements IUserService {
 
     @Override
     public Boolean addUser(User user) {
-        if (getUserRep.getUserByLogin(user.getLogin()) != null)
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserByLogin(user.getLogin());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser != null)
             return false;
 
-        Boolean res = userRep.addUser(user);
+        Boolean res;
+        try {
+            res = userRep.addUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Добавлен пользователь: " + user.getFirstName() + ", " + user.getLastName() + ", логин - " +
@@ -55,10 +66,21 @@ public class UserService implements IUserService {
 
     @Override
     public Boolean deleteUser(int id) {
-        if (getUserRep.getUserById(id) == null)
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null)
             return false;
 
-        Boolean res = userRep.deleteUser(id);
+        Boolean res;
+        try {
+            res = userRep.deleteUser(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Удалён пользователь: идентификатор - " + Integer.toString(id));
@@ -70,10 +92,21 @@ public class UserService implements IUserService {
 
     @Override
     public Boolean updateUser(User user) {
-        if (getUserRep.getUserById(user.getId()) == null)
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(user.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null)
             return false;
 
-        Boolean res = userRep.updateUser(user);
+        Boolean res;
+        try {
+            res = userRep.updateUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Обновлён пользователь с идентификатором - " + Integer.toString(user.getId()) +
@@ -91,7 +124,12 @@ public class UserService implements IUserService {
 
     @Override
     public User logIn(String login, String password) {
-        User user = getUserRep.getUserAccount(login, password);
+        User user = null;
+        try {
+            user = getUserRep.getUserAccount(login, password);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (user != null)
             logger.info("Пользователь вошёл в аккаунт: идентификатор - " + user.getId() + ", " + user.getFirstName() +
@@ -105,7 +143,12 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserByLogin(String login) {
-        User user = getUserRep.getUserByLogin(login);
+        User user = null;
+        try {
+            user = getUserRep.getUserByLogin(login);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (user != null)
             logger.info("По логину получен пользователь: идентификатор - " + user.getId() + ", " + user.getFirstName() +
@@ -119,7 +162,12 @@ public class UserService implements IUserService {
 
     @Override
     public ArrayList<User> getUsersList() {
-        ArrayList<User> arrUsers = getUserRep.getUsersList();
+        ArrayList<User> arrUsers = null;
+        try {
+            arrUsers = getUserRep.getUsersList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (arrUsers != null && arrUsers.size() != 0)
             logger.info("Получен список из " + arrUsers.size() + " пользователей");

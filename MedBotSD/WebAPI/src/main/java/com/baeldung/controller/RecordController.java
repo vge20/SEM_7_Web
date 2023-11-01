@@ -3,12 +3,10 @@ package com.baeldung.controller;
 import com.baeldung.Record.IRecordService;
 import com.baeldung.Record.Record;
 import com.baeldung.config.AppConfig;
+import com.baeldung.dto.RecordDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -29,11 +27,10 @@ public class RecordController {
         }
     }
 
-    @GetMapping("/records")
+    @GetMapping("/api/v1/records")
     protected ResponseEntity<Object> doGet(@RequestParam String patientLogin, @RequestParam Date startDate,
                                            @RequestParam Date endDate, @RequestParam int limit,
                                            @RequestParam int skipped) {
-        System.out.println("AAA");
         ArrayList<Record> recordsList = recordService.getRecordsByPatientDateInterval(patientLogin,
                                         startDate, endDate, limit, skipped);
         if (recordsList == null) {
@@ -42,5 +39,10 @@ public class RecordController {
         else {
             return new ResponseEntity<>(recordsList, HttpStatus.OK);
         }
+    }
+
+    @PostMapping("/api/v1/records")
+    protected ResponseEntity<Object> doPost(@RequestBody RecordDTO recordDTO) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

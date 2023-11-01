@@ -5,6 +5,7 @@ import com.baeldung.Doctor.IGetDoctorRepository;
 import com.baeldung.Schedule.IScheduleRepository;
 import com.baeldung.Schedule.Schedule;
 import com.baeldung.User.IGetUserRepository;
+import com.baeldung.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,13 @@ public class RecordService implements IRecordService {
             throw new RuntimeException(e);
         }
 
-        if (getUserRep.getUserById(record.getIdUser()) == null) {
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(record.getIdUser());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null) {
             logger.info("Неудачаная попытка добавить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
@@ -195,7 +202,13 @@ public class RecordService implements IRecordService {
             throw new RuntimeException(e);
         }
 
-        if (getUserRep.getUserById(record.getIdUser()) == null) {
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(record.getIdUser());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null) {
             logger.info("Неудачаная попытка удалить запись: id доктора - " + record.getIdDoctor() +
                     ", id пользователя - " + record.getIdUser() + ", дата - " + record.getDate() +
                     ", время начала - " + record.getStartTime() + ", время окончания - " + record.getEndTime());
@@ -251,7 +264,13 @@ public class RecordService implements IRecordService {
             throw new RuntimeException(e);
         }
 
-        if (getUserRep.getUserById(record.getIdUser()) == null) {
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(record.getIdUser());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null) {
             logger.info("Неудачаная попытка обновить запись: id записи - " + record.getId() +  ", id доктора - " +
                     record.getIdDoctor() + ", id пользователя - " + record.getIdUser() + ", дата - " +
                     record.getDate() + ", время начала - " + record.getStartTime() + ", время окончания - " +
