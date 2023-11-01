@@ -49,7 +49,7 @@ public class RecordService implements IRecordService {
 
     @Override
     public Boolean addRecord(Record record) {
-        Doctor tmpDoctor = null;
+        Doctor tmpDoctor;
         try {
             tmpDoctor = getDoctorRep.getDoctorById(record.getIdDoctor());
         } catch (Exception e) {
@@ -102,7 +102,12 @@ public class RecordService implements IRecordService {
             return false;
         }
 
-        ArrayList<Record> recordsUserByDate = recordRep.getRecordsByUserDate(record.getIdUser(), record.getDate());
+        ArrayList<Record> recordsUserByDate = null;
+        try {
+            recordsUserByDate = recordRep.getRecordsByUserDate(record.getIdUser(), record.getDate());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (recordsUserByDate != null)
             for (int i = 0; i < recordsUserByDate.size(); i++) {
@@ -129,8 +134,13 @@ public class RecordService implements IRecordService {
                 }
             }
 
-        ArrayList<Record> recordsDoctorByDate = recordRep.getRecordsByDoctorDate(record.getIdDoctor(),
-                record.getDate());
+        ArrayList<Record> recordsDoctorByDate = null;
+        try {
+            recordsDoctorByDate = recordRep.getRecordsByDoctorDate(record.getIdDoctor(),
+                    record.getDate());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (recordsDoctorByDate != null)
             for (int i = 0; i < recordsDoctorByDate.size(); i++) {
@@ -157,7 +167,12 @@ public class RecordService implements IRecordService {
                 }
             }
 
-        Boolean res = recordRep.addRecord(record);
+        Boolean res = null;
+        try {
+            res = recordRep.addRecord(record);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Добавлена запись: id доктора - " + record.getIdDoctor() +
@@ -193,8 +208,13 @@ public class RecordService implements IRecordService {
             return false;
         }
 
-        ArrayList<Record> recordsUserDoctorByDate = recordRep.getRecordsByUserDoctorDate(record.getIdUser(),
-                record.getIdDoctor(), record.getDate());
+        ArrayList<Record> recordsUserDoctorByDate = null;
+        try {
+            recordsUserDoctorByDate = recordRep.getRecordsByUserDoctorDate(record.getIdUser(),
+                    record.getIdDoctor(), record.getDate());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         Boolean res = false;
 
         for (int i = 0; i < recordsUserDoctorByDate.size(); i++) {
@@ -202,7 +222,11 @@ public class RecordService implements IRecordService {
                     record.getEndTime().compareTo(recordsUserDoctorByDate.get(i).getEndTime()) == 0 &&
                     record.getIdUser() == recordsUserDoctorByDate.get(i).getIdUser() &&
                     record.getIdDoctor() == recordsUserDoctorByDate.get(i).getIdDoctor()) {
-                res = recordRep.deleteRecord(record.getId());
+                try {
+                    res = recordRep.deleteRecord(record.getId());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
@@ -242,8 +266,13 @@ public class RecordService implements IRecordService {
             return false;
         }
 
-        ArrayList<Record> recordsUserDoctorByDate = recordRep.getRecordsByUserDoctorDate(record.getIdUser(),
-                record.getIdDoctor(), record.getDate());
+        ArrayList<Record> recordsUserDoctorByDate = null;
+        try {
+            recordsUserDoctorByDate = recordRep.getRecordsByUserDoctorDate(record.getIdUser(),
+                    record.getIdDoctor(), record.getDate());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (recordsUserDoctorByDate != null) {
             for (int i = 0; i < recordsUserDoctorByDate.size(); i++) {
@@ -275,7 +304,12 @@ public class RecordService implements IRecordService {
             }
         }
 
-        Boolean res = recordRep.updateRecord(record);
+        Boolean res = null;
+        try {
+            res = recordRep.updateRecord(record);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (res)
             logger.info("Обновлена запись: id записи - " + record.getId() +  ", id доктора - " +
@@ -293,7 +327,12 @@ public class RecordService implements IRecordService {
 
     @Override
     public ArrayList<Record> getRecordsByDate(int idDoctor, Date date) {
-        ArrayList<Record> arrRecords = recordRep.getRecordsByDoctorDate(idDoctor, date);
+        ArrayList<Record> arrRecords;
+        try {
+            arrRecords = recordRep.getRecordsByDoctorDate(idDoctor, date);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         if (arrRecords != null && arrRecords.size() != 0)
             logger.info("Получен список из - " + arrRecords.size() + " записей к доктору с id - " +
