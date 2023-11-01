@@ -45,7 +45,7 @@ public class UserRepository implements IUserRepository, IGetUserRepository {
 
     @Override
     public Boolean updateUser(User user) throws Exception {
-        UserDAModel userDAModel = new UserDAModel(user.getId(), user.getLogin(), user.getLogin(),
+        UserDAModel userDAModel = new UserDAModel(user.getId(), user.getLogin(), user.getPassword(),
                 user.getPrivilegeLevel(), user.getFirstName(), user.getLastName(), user.getGender(),
                 user.getBirthDate());
 
