@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class UserService implements IUserService {
@@ -165,6 +166,23 @@ public class UserService implements IUserService {
         ArrayList<User> arrUsers = null;
         try {
             arrUsers = getUserRep.getUsersList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (arrUsers != null && arrUsers.size() != 0)
+            logger.info("Получен список из " + arrUsers.size() + " пользователей");
+        else
+            logger.info("Неудачная попытка получить список пользователей");
+
+        return arrUsers;
+    }
+
+    @Override
+    public List<User> getUsersListBySubstrGender(boolean gender, String substr, int limit, int skipped) {
+        List<User> arrUsers = null;
+        try {
+            arrUsers = getUserRep.getUsersListBySubstrGender(gender, substr, limit, skipped);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

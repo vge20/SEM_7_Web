@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository implements IUserRepository, IGetUserRepository {
     @Override
@@ -199,6 +200,50 @@ public class UserRepository implements IUserRepository, IGetUserRepository {
         }
 
         ArrayList<User> usersList;
+        if (userDAModels.size() != 0) {
+            usersList = new ArrayList<>();
+            for (int i = 0; i < userDAModels.size(); i++) {
+                usersList.add(new User(userDAModels.get(i).getId(), userDAModels.get(i).getLogin(),
+                        userDAModels.get(i).getPassword(), userDAModels.get(i).getPrivilegeLevel(),
+                        userDAModels.get(i).getFirstName(), userDAModels.get(i).getLastName(),
+                        userDAModels.get(i).getGender(), userDAModels.get(i).getBirthDate()));
+            }
+        }
+        else {
+            usersList = null;
+        }
+
+        return usersList;
+    }
+
+    @Override
+    public List<User> getUsersListBySubstrGender(boolean gender, String substr, int limit, int skipped)
+            throws Exception {
+        substr = '%' + substr + '%';
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from users " +
+                "where gender = ? and login like ? limit ? offset ?");
+        statement.setBoolean(1, gender);
+        statement.setString(2, substr);
+        statement.setInt(3, limit);
+        statement.setInt(4, skipped);
+        ResultSet queryRes = statement.executeQuery();
+
+        List<UserDAModel> userDAModels = new ArrayList<>();
+        while (queryRes.next()) {
+            UserDAModel userDAModel = new UserDAModel();
+            userDAModel.setId(queryRes.getInt("id"));
+            userDAModel.setLogin(queryRes.getString("login"));
+            userDAModel.setPassword(queryRes.getString("password"));
+            userDAModel.setPrivilegeLevel(queryRes.getInt("privilegeLevel"));
+            userDAModel.setFirstName(queryRes.getString("firstName"));
+            userDAModel.setLastName(queryRes.getString("lastName"));
+            userDAModel.setGender(queryRes.getBoolean("gender"));
+            userDAModel.setBirthDate(queryRes.getDate("birthDate"));
+            userDAModels.add(userDAModel);
+        }
+
+        List<User> usersList;
         if (userDAModels.size() != 0) {
             usersList = new ArrayList<>();
             for (int i = 0; i < userDAModels.size(); i++) {

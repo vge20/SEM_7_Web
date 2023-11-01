@@ -5,6 +5,7 @@ import com.baeldung.User.IUserRepository;
 import com.baeldung.User.User;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepositoryMock implements IUserRepository, IGetUserRepository {
     public User getUserByLogin(String login) {
@@ -23,6 +24,11 @@ public class UserRepositoryMock implements IUserRepository, IGetUserRepository {
 
     @Override
     public ArrayList<User> getUsersList() {
+        return null;
+    }
+
+    @Override
+    public List<User> getUsersListBySubstrGender(boolean gender, String substr, int limit, int skipped) {
         return null;
     }
 
