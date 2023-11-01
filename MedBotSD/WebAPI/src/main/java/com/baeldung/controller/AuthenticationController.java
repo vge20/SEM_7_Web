@@ -2,6 +2,7 @@ package com.baeldung.controller;
 
 import com.baeldung.User.IUserService;
 import com.baeldung.User.User;
+import com.baeldung.authentication.Authentication;
 import com.baeldung.config.AppConfig;
 import com.baeldung.dto.AuthenticationDTO;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class AuthenticationController {
     @PostMapping("/api/v1/authentications")
     protected ResponseEntity<Object> doPost(@RequestBody AuthenticationDTO authenticationDTO) {
         User user = userService.logIn(authenticationDTO.getLogin(), authenticationDTO.getPassword());
+        Authentication.setPrivilegeLevel(user.getPrivilegeLevel());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
