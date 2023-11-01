@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Properties;
@@ -379,6 +380,68 @@ public class RecordService implements IRecordService {
             logger.info("Неудачная попытка получить записи к доктору!");
 
         return arrRecords;
+    }
+
+    @Override
+    public Boolean deleteRecordByParams(int doctorId, int userId, Date date, Time startTime, Time endTime) {
+        Doctor tmpDoctor = null;
+        try {
+            tmpDoctor = getDoctorRep.getDoctorById(doctorId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        User tmpUser = null;
+        try {
+            tmpUser = getUserRep.getUserById(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (tmpUser == null) {
+            logger.info("Неудачаная попытка удалить запись: id доктора - " + doctorId +
+                    ", id пользователя - " + userId + ", дата - " + date +
+                    ", время начала - " + startTime + ", время окончания - " + endTime);
+            return false;
+        }
+        else if (tmpDoctor == null) {
+            logger.info("Неудачаная попытка удалить запись: id доктора - " + doctorId +
+                    ", id пользователя - " + userId + ", дата - " + date +
+                    ", время начала - " + startTime + ", время окончания - " + endTime);
+            return false;
+        }
+
+        ArrayList<Record> recordsUserDoctorByDate = null;
+        try {
+            recordsUserDoctorByDate = recordRep.getRecordsByUserDoctorDate(userId,
+                    doctorId, date);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Boolean res = false;
+
+        for (int i = 0; i < recordsUserDoctorByDate.size(); i++) {
+            if (startTime.compareTo(recordsUserDoctorByDate.get(i).getStartTime()) == 0 &&
+                    endTime.compareTo(recordsUserDoctorByDate.get(i).getEndTime()) == 0 &&
+                    userId == recordsUserDoctorByDate.get(i).getIdUser() &&
+                    doctorId == recordsUserDoctorByDate.get(i).getIdDoctor()) {
+                try {
+                    res = recordRep.deleteRecordByParams(doctorId, userId, date, startTime, endTime);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        if (res)
+            logger.info("Удалена запись: id доктора - " + doctorId +
+                    ", id пользователя - " + userId + ", дата - " + date +
+                    ", время начала - " + startTime + ", время окончания - " + endTime);
+        else
+            logger.info("Неудачаная попытка удалить запись: id доктора - " + doctorId +
+                    ", id пользователя - " + userId + ", дата - " + date +
+                    ", время начала - " + startTime + ", время окончания - " + endTime);
+
+        return res;
     }
 
 

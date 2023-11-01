@@ -2,10 +2,7 @@ package com.baeldung.Record;
 
 import com.baeldung.DataSource.DataSource;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class RecordRepository implements IRecordRepository {
@@ -258,6 +255,24 @@ public class RecordRepository implements IRecordRepository {
             record = null;
 
         return record;
+    }
+
+    @Override
+    public Boolean deleteRecordByParams(int doctorId, int userId, Date date, Time startTime, Time endTime)
+            throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("delete from records " +
+                "where idDoctor = ? and idUser = ? and date = ? and startTime = ? and endTime = ?");
+        statement.setInt(1, doctorId);
+        statement.setInt(2, userId);
+        statement.setDate(3, date);
+        statement.setTime(4, startTime);
+        statement.setTime(5, endTime);
+
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 }
 

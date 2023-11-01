@@ -1,6 +1,7 @@
 package com.baeldung.Record;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public interface IRecordRepository {
@@ -13,4 +14,6 @@ public interface IRecordRepository {
     public ArrayList<Record> getRecordsByPatientDateInterval(String patientLogin, Date startDate,
                                                              Date endDate, int limit, int skipped) throws Exception;
     public Record getRecordById(int id) throws Exception;
+    public Boolean deleteRecordByParams(int doctorId, int userId, Date date, Time startTime, Time endTime)
+        throws Exception;
 }

@@ -4,6 +4,7 @@ import com.baeldung.Record.Record;
 import com.baeldung.Record.IRecordRepository;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class RecordRepositoryMock implements IRecordRepository {
@@ -44,6 +45,12 @@ public class RecordRepositoryMock implements IRecordRepository {
 
     @Override
     public Record getRecordById(int id) {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteRecordByParams(int doctorId, int userId, Date date, Time startTime, Time endTime)
+            throws Exception {
         return null;
     }
 }

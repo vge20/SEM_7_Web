@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 
 @CrossOrigin
@@ -58,6 +59,38 @@ public class RecordController {
                 recordDTO.getStartTime(), recordDTO.getEndTime());
         if (recordService.addRecord(record)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PatchMapping("/api/v1/records/{id}")
+    protected ResponseEntity<Object> doPatch(@PathVariable int id, @RequestBody RecordDTO recordDTO) {
+        User user = userService.getUserByLogin(recordDTO.getPatientLogin());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Record record = new Record(id, recordDTO.getDoctorId(), user.getId(), recordDTO.getDate(),
+                recordDTO.getStartTime(), recordDTO.getEndTime());
+        if (recordService.updateRecord(record)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/api/v1/records")
+    protected ResponseEntity<Object> doDelete(@RequestParam int doctorId, @RequestParam String patientLogin,
+                                              @RequestParam Date date, @RequestParam Time startTime,
+                                              @RequestParam Time endTime) {
+        User user = userService.getUserByLogin(patientLogin);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if (recordService.deleteRecordByParams(doctorId, user.getId(), date, startTime, endTime)) {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
