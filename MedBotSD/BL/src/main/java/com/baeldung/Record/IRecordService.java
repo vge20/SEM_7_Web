@@ -8,4 +8,6 @@ public interface IRecordService {
     public Boolean deleteRecord(Record record);
     public Boolean updateRecord(Record record);
     public ArrayList<Record> getRecordsByDate(int idDoctor, Date date);
+    public ArrayList<Record> getRecordsByPatientDateInterval(String patientLogin, Date startDate, Date endDate,
+                                                             int limit, int skipped);
 }

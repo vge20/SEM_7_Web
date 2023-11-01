@@ -178,6 +178,58 @@ public class RecordRepository implements IRecordRepository {
     }
 
     @Override
+    public ArrayList<Record> getRecordsByPatientDateInterval(String patientLogin, Date startDate, Date endDate,
+                                                             int limit, int skipped) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from users where login = ?");
+        statement.setString(1, patientLogin);
+        ResultSet queryRes = statement.executeQuery();
+
+        int userId;
+        if (queryRes.next()) {
+            userId = queryRes.getInt("id");
+        }
+        else {
+            return null;
+        }
+
+        statement = connection.prepareStatement("select * from records where idUser = ? " +
+                                                    "and date >= ? and date <= ? limit ? offset ?");
+        statement.setInt(1, userId);
+        statement.setDate(2, startDate);
+        statement.setDate(3, endDate);
+        statement.setInt(4, limit);
+        statement.setInt(5, skipped);
+        queryRes = statement.executeQuery();
+
+        ArrayList<RecordDAModel> arrRecordDAModels = new ArrayList<>();
+        while (queryRes.next()) {
+            RecordDAModel recordDAModel = new RecordDAModel();
+            recordDAModel.setId(queryRes.getInt("id"));
+            recordDAModel.setIdUser(queryRes.getInt("idUser"));
+            recordDAModel.setIdDoctor(queryRes.getInt("idDoctor"));
+            recordDAModel.setDate(queryRes.getDate("date"));
+            recordDAModel.setStartTime(queryRes.getTime("startTime"));
+            recordDAModel.setEndTime(queryRes.getTime("endTime"));
+            arrRecordDAModels.add(recordDAModel);
+        }
+
+        ArrayList<Record> arrRecords;
+        if (arrRecordDAModels.size() != 0) {
+            arrRecords = new ArrayList<>();
+            for (int i = 0; i < arrRecordDAModels.size(); i++) {
+                arrRecords.add(new Record(arrRecordDAModels.get(i).getId(), arrRecordDAModels.get(i).getIdDoctor(),
+                        arrRecordDAModels.get(i).getIdUser(), arrRecordDAModels.get(i).getDate(),
+                        arrRecordDAModels.get(i).getStartTime(), arrRecordDAModels.get(i).getEndTime()));
+            }
+        }
+        else
+            arrRecords = null;
+
+        return arrRecords;
+    }
+
+    @Override
     public Record getRecordById(int id) throws Exception {
         Connection connection = DataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement("select * from records " +

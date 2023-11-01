@@ -38,6 +38,11 @@ public class RecordRepositoryMock implements IRecordRepository {
     }
 
     @Override
+    public ArrayList<Record> getRecordsByPatientDateInterval(String patientLogin, Date startDate, Date endDate, int limit, int skipped) throws Exception {
+        return null;
+    }
+
+    @Override
     public Record getRecordById(int id) {
         return null;
     }

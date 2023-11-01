@@ -343,4 +343,24 @@ public class RecordService implements IRecordService {
 
         return arrRecords;
     }
+
+    @Override
+    public ArrayList<Record> getRecordsByPatientDateInterval(String patientLogin, Date startDate,
+                                                             Date endDate, int limit, int skipped) {
+        ArrayList<Record> arrRecords;
+        try {
+            arrRecords = recordRep.getRecordsByPatientDateInterval(patientLogin, startDate, endDate, limit, skipped);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (arrRecords != null && arrRecords.size() != 0)
+            logger.info("Получен список из - " + arrRecords.size() + " записей к доктору!");
+        else
+            logger.info("Неудачная попытка получить записи к доктору!");
+
+        return arrRecords;
+    }
+
+
 }

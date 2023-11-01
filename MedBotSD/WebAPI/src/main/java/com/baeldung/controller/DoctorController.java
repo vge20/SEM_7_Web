@@ -29,13 +29,23 @@ public class DoctorController {
     protected ResponseEntity<Object> doGet(@RequestParam String specialization, @RequestParam int limit,
                                            @RequestParam int skipped) {
         List<Doctor> doctorsList = doctorService.getDoctorsList(specialization, limit, skipped);
-        return new ResponseEntity<>(doctorsList, HttpStatus.OK);
+        if (doctorsList == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        else {
+            return new ResponseEntity<>(doctorsList, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/api/v1/doctors/{id}")
     protected ResponseEntity<Object> doGet(@PathVariable int id) {
         Doctor doctor = doctorService.getDoctorById(id);
-        return new ResponseEntity<>(doctor, HttpStatus.OK);
+        if (doctor == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        else {
+            return new ResponseEntity<>(doctor, HttpStatus.OK);
+        }
     }
 
     @PostMapping("/api/v1/doctors")
