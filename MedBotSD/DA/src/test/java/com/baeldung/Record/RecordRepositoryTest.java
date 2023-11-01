@@ -1,7 +1,6 @@
 package com.baeldung.Record;
 
 import com.baeldung.Doctor.DoctorDAModel;
-import com.baeldung.Doctor.DoctorSessionFactory;
 import com.baeldung.User.UserDAModel;
 import com.baeldung.User.UserSessionFactory;
 import org.hibernate.Session;
@@ -52,7 +51,12 @@ class RecordRepositoryTest {
         session.close();
 
         RecordRepository recordRepository = new RecordRepository();
-        Boolean res = recordRepository.deleteRecord(TEST_RECORD_DAM.getId());
+        Boolean res = null;
+        try {
+            res = recordRepository.deleteRecord(TEST_RECORD_DAM.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         session = UserSessionFactory.getSessionFactory().openSession();
         transaction = session.beginTransaction();
@@ -96,8 +100,13 @@ class RecordRepositoryTest {
         session.close();
 
         RecordRepository recordRepository = new RecordRepository();
-        ArrayList<Record> records = recordRepository.getRecordsByUserDoctorDate(TEST_USER_DAM.getId(),
-                TEST_DOCTOR_DAM.getId(), TEST_DATE);
+        ArrayList<Record> records = null;
+        try {
+            records = recordRepository.getRecordsByUserDoctorDate(TEST_USER_DAM.getId(),
+                    TEST_DOCTOR_DAM.getId(), TEST_DATE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         session = RecordSessionFactory.getSessionFactory().openSession();
         transaction = session.beginTransaction();

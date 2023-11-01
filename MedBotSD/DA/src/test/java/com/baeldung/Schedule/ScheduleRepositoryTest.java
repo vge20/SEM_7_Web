@@ -1,7 +1,6 @@
 package com.baeldung.Schedule;
 
 import com.baeldung.Doctor.DoctorDAModel;
-import com.baeldung.Doctor.DoctorSessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.Test;

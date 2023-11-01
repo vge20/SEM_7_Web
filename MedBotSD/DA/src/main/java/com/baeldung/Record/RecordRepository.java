@@ -1,79 +1,95 @@
 package com.baeldung.Record;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import com.baeldung.DataSource.DataSource;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class RecordRepository implements IRecordRepository {
 
     @Override
-    public Boolean addRecord(Record record) {
+    public Boolean addRecord(Record record) throws Exception {
         RecordDAModel recordDAModel = new RecordDAModel(record.getIdDoctor(), record.getIdUser(),
                 record.getDate(), record.getStartTime(), record.getEndTime());
-        try {
-            Session session = RecordSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.save(recordDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
 
-        return true;
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("insert into " +
+                "Records(idDoctor, idUser, date, startTime, endTime) values " +
+                "(?, ?, ?, ?, ?)");
+        statement.setInt(1, recordDAModel.getIdDoctor());
+        statement.setInt(2, recordDAModel.getIdUser());
+        statement.setDate(3, recordDAModel.getDate());
+        statement.setTime(4, recordDAModel.getStartTime());
+        statement.setTime(5, recordDAModel.getEndTime());
+
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
-    public Boolean updateRecord(Record record) {
+    public Boolean updateRecord(Record record) throws Exception {
         RecordDAModel recordDAModel = new RecordDAModel(record.getId(), record.getIdDoctor(), record.getIdUser(),
                 record.getDate(), record.getStartTime(), record.getEndTime());
-        try {
-            Session session = RecordSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.update(recordDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
 
-        return true;
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("update records set " +
+                "idDoctor = ?, idUser = ?, date = ?, startTime = ?, endTime = ? where id = ?");
+        statement.setInt(1, recordDAModel.getIdDoctor());
+        statement.setInt(2, recordDAModel.getIdUser());
+        statement.setDate(3, recordDAModel.getDate());
+        statement.setTime(4, recordDAModel.getStartTime());
+        statement.setTime(5, recordDAModel.getEndTime());
+        statement.setInt(6, recordDAModel.getId());
+
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
-    public Boolean deleteRecord(int id) {
-        RecordDAModel recordDAModel = new RecordDAModel();
-        recordDAModel.setId(id);
+    public Boolean deleteRecord(int id) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("delete from records " +
+                "where id = ?");
+        statement.setInt(1, id);
 
-        try {
-            Session session = RecordSessionFactory.getSessionFactory().openSession();
-            Transaction transaction = session.beginTransaction();
-            session.delete(recordDAModel);
-            transaction.commit();
-            session.close();
-        } catch (Exception e) {
-            throw e;
-        }
-
-        return true;
+        if (statement.executeUpdate() == 0)
+            return false;
+        else
+            return true;
     }
 
     @Override
-    public ArrayList<Record> getRecordsByUserDate(int idUser, Date date) {
-        ArrayList<RecordDAModel> arrRecordDAModels;
-        try {
-            arrRecordDAModels = (ArrayList<RecordDAModel>) RecordSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from RecordDAModel where idUser = " + Integer.toString(idUser) +
-                            " and date = '" + date.toString() + "'").list();
-        } catch (Exception e) {
-            throw e;
+    public ArrayList<Record> getRecordsByUserDate(int idUser, Date date) throws Exception {
+        ArrayList<RecordDAModel> arrRecordDAModels = new ArrayList<>();
+
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from records " +
+                "where idUser = ? and date = ?");
+        statement.setInt(1, idUser);
+        statement.setDate(2, date);
+        ResultSet queryRes = statement.executeQuery();
+
+        while (queryRes.next()) {
+            RecordDAModel recordDAModel = new RecordDAModel();
+            recordDAModel.setId(queryRes.getInt("id"));
+            recordDAModel.setIdUser(queryRes.getInt("idUser"));
+            recordDAModel.setIdDoctor(queryRes.getInt("idDoctor"));
+            recordDAModel.setDate(queryRes.getDate("date"));
+            recordDAModel.setStartTime(queryRes.getTime("startTime"));
+            recordDAModel.setEndTime(queryRes.getTime("endTime"));
+            arrRecordDAModels.add(recordDAModel);
         }
 
         ArrayList<Record> arrRecords;
         if (arrRecordDAModels.size() != 0) {
-            arrRecords = new ArrayList<>(0);
+            arrRecords = new ArrayList<>();
             for (int i = 0; i < arrRecordDAModels.size(); i++) {
                 arrRecords.add(new Record(arrRecordDAModels.get(i).getId(), arrRecordDAModels.get(i).getIdDoctor(),
                         arrRecordDAModels.get(i).getIdUser(), arrRecordDAModels.get(i).getDate(),
@@ -87,19 +103,30 @@ public class RecordRepository implements IRecordRepository {
     }
 
     @Override
-    public ArrayList<Record> getRecordsByDoctorDate(int idDoctor, Date date) {
-        ArrayList<RecordDAModel> arrRecordDAModels;
-        try {
-            arrRecordDAModels = (ArrayList<RecordDAModel>) RecordSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from RecordDAModel where idDoctor = " + Integer.toString(idDoctor) +
-                            " and date = '" + date.toString() + "'").list();
-        } catch (Exception e) {
-            throw e;
+    public ArrayList<Record> getRecordsByDoctorDate(int idDoctor, Date date) throws Exception {
+        ArrayList<RecordDAModel> arrRecordDAModels = new ArrayList<>();
+
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from records " +
+                "where idDoctor = ? and date = ?");
+        statement.setInt(1, idDoctor);
+        statement.setDate(2, date);
+        ResultSet queryRes = statement.executeQuery();
+
+        while (queryRes.next()) {
+            RecordDAModel recordDAModel = new RecordDAModel();
+            recordDAModel.setId(queryRes.getInt("id"));
+            recordDAModel.setIdUser(queryRes.getInt("idUser"));
+            recordDAModel.setIdDoctor(queryRes.getInt("idDoctor"));
+            recordDAModel.setDate(queryRes.getDate("date"));
+            recordDAModel.setStartTime(queryRes.getTime("startTime"));
+            recordDAModel.setEndTime(queryRes.getTime("endTime"));
+            arrRecordDAModels.add(recordDAModel);
         }
 
         ArrayList<Record> arrRecords;
         if (arrRecordDAModels.size() != 0) {
-            arrRecords = new ArrayList<>(0);
+            arrRecords = new ArrayList<>();
             for (int i = 0; i < arrRecordDAModels.size(); i++) {
                 arrRecords.add(new Record(arrRecordDAModels.get(i).getId(), arrRecordDAModels.get(i).getIdDoctor(),
                         arrRecordDAModels.get(i).getIdUser(), arrRecordDAModels.get(i).getDate(),
@@ -113,20 +140,31 @@ public class RecordRepository implements IRecordRepository {
     }
 
     @Override
-    public ArrayList<Record> getRecordsByUserDoctorDate(int idUser, int idDoctor, Date date) {
-        ArrayList<RecordDAModel> arrRecordDAModels;
-        try {
-            arrRecordDAModels = (ArrayList<RecordDAModel>) RecordSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from RecordDAModel where idDoctor = " + Integer.toString(idDoctor) +
-                            " and idUser = " + Integer.toString(idUser) + " and date = '" + date.toString() + "'")
-                    .list();
-        } catch (Exception e) {
-            throw e;
+    public ArrayList<Record> getRecordsByUserDoctorDate(int idUser, int idDoctor, Date date) throws Exception {
+        ArrayList<RecordDAModel> arrRecordDAModels = new ArrayList<>();
+
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from records " +
+                "where idDoctor = ? and idUser = ? and date = ?");
+        statement.setInt(1, idDoctor);
+        statement.setInt(2, idUser);
+        statement.setDate(3, date);
+        ResultSet queryRes = statement.executeQuery();
+
+        while (queryRes.next()) {
+            RecordDAModel recordDAModel = new RecordDAModel();
+            recordDAModel.setId(queryRes.getInt("id"));
+            recordDAModel.setIdUser(queryRes.getInt("idUser"));
+            recordDAModel.setIdDoctor(queryRes.getInt("idDoctor"));
+            recordDAModel.setDate(queryRes.getDate("date"));
+            recordDAModel.setStartTime(queryRes.getTime("startTime"));
+            recordDAModel.setEndTime(queryRes.getTime("endTime"));
+            arrRecordDAModels.add(recordDAModel);
         }
 
         ArrayList<Record> arrRecords;
         if (arrRecordDAModels.size() != 0) {
-            arrRecords = new ArrayList<>(0);
+            arrRecords = new ArrayList<>();
             for (int i = 0; i < arrRecordDAModels.size(); i++) {
                 arrRecords.add(new Record(arrRecordDAModels.get(i).getId(), arrRecordDAModels.get(i).getIdDoctor(),
                         arrRecordDAModels.get(i).getIdUser(), arrRecordDAModels.get(i).getDate(),
@@ -140,20 +178,29 @@ public class RecordRepository implements IRecordRepository {
     }
 
     @Override
-    public Record getRecordById(int id) {
-        ArrayList<RecordDAModel> arrRecordDAModels;
-        try {
-            arrRecordDAModels = (ArrayList<RecordDAModel>) RecordSessionFactory.getSessionFactory()
-                    .openSession().createQuery("from RecordDAModel where id = " + Integer.toString(id)).list();
-        } catch (Exception e) {
-            throw e;
+    public Record getRecordById(int id) throws Exception {
+        Connection connection = DataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement("select * from records " +
+                "where id = ?");
+        statement.setInt(1, id);
+        ResultSet queryRes = statement.executeQuery();
+
+        RecordDAModel recordDAModel = null;
+        if (queryRes.next()) {
+            recordDAModel = new RecordDAModel();
+            recordDAModel.setId(queryRes.getInt("id"));
+            recordDAModel.setIdUser(queryRes.getInt("idUser"));
+            recordDAModel.setIdDoctor(queryRes.getInt("idDoctor"));
+            recordDAModel.setDate(queryRes.getDate("date"));
+            recordDAModel.setStartTime(queryRes.getTime("startTime"));
+            recordDAModel.setEndTime(queryRes.getTime("endTime"));
         }
 
         Record record;
-        if (arrRecordDAModels.size() != 0) {
-            record = new Record(arrRecordDAModels.get(0).getId(), arrRecordDAModels.get(0).getIdDoctor(),
-                    arrRecordDAModels.get(0).getIdUser(), arrRecordDAModels.get(0).getDate(),
-                    arrRecordDAModels.get(0).getStartTime(), arrRecordDAModels.get(0).getEndTime());
+        if (recordDAModel != null) {
+            record = new Record(recordDAModel.getId(), recordDAModel.getIdDoctor(),
+                    recordDAModel.getIdUser(), recordDAModel.getDate(),
+                    recordDAModel.getStartTime(), recordDAModel.getEndTime());
         }
         else
             record = null;
