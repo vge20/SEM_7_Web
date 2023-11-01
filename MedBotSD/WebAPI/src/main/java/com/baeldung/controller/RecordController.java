@@ -1,7 +1,11 @@
 package com.baeldung.controller;
 
+import com.baeldung.Doctor.Doctor;
+import com.baeldung.Doctor.IDoctorService;
 import com.baeldung.Record.IRecordService;
 import com.baeldung.Record.Record;
+import com.baeldung.User.IUserService;
+import com.baeldung.User.User;
 import com.baeldung.config.AppConfig;
 import com.baeldung.dto.RecordDTO;
 import org.springframework.http.HttpStatus;
@@ -18,10 +22,13 @@ public class RecordController {
 
     private IRecordService recordService;
 
+    private IUserService userService;
+
     public RecordController() {
         try {
             AppConfig appConfig = new AppConfig();
             recordService = appConfig.getRecordServiceImpl();
+            userService = appConfig.getUserServiceImpl();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,6 +50,17 @@ public class RecordController {
 
     @PostMapping("/api/v1/records")
     protected ResponseEntity<Object> doPost(@RequestBody RecordDTO recordDTO) {
-        return new ResponseEntity<>(HttpStatus.OK);
+        User user = userService.getUserByLogin(recordDTO.getPatientLogin());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        Record record = new Record(recordDTO.getId(), recordDTO.getDoctorId(), user.getId(), recordDTO.getDate(),
+                recordDTO.getStartTime(), recordDTO.getEndTime());
+        if (recordService.addRecord(record)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

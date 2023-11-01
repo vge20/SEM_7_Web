@@ -6,26 +6,26 @@ import java.sql.Time;
 public class RecordDTO {
 
     private int id;
-    private int idDoctor;
-    private String userLogin;
+    private int doctorId;
+    private String patientLogin;
     private Date date;
     private Time startTime;
     private Time endTime;
 
     public RecordDTO() {}
 
-    public RecordDTO(int id, int idDoctor, String userLogin, Date date, Time startTime, Time endTime) {
+    public RecordDTO(int id, int doctorId, String patientLogin, Date date, Time startTime, Time endTime) {
         this.id = id;
-        this.idDoctor = idDoctor;
-        this.userLogin = userLogin;
+        this.doctorId = doctorId;
+        this.patientLogin = patientLogin;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public RecordDTO(int idDoctor, String userLogin, Date date, Time startTime, Time endTime) {
-        this.idDoctor = idDoctor;
-        this.userLogin = userLogin;
+    public RecordDTO(int doctorId, String patientLogin, Date date, Time startTime, Time endTime) {
+        this.doctorId = doctorId;
+        this.patientLogin = patientLogin;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -37,22 +37,6 @@ public class RecordDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getIdDoctor() {
-        return idDoctor;
-    }
-
-    public void setIdDoctor(int idDoctor) {
-        this.idDoctor = idDoctor;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
     }
 
     public Date getDate() {
@@ -77,5 +61,21 @@ public class RecordDTO {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    public int getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(int doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public String getPatientLogin() {
+        return patientLogin;
+    }
+
+    public void setPatientLogin(String patientLogin) {
+        this.patientLogin = patientLogin;
     }
 }
