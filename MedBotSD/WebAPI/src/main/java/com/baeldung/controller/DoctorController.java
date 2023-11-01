@@ -3,6 +3,7 @@ package com.baeldung.controller;
 import com.baeldung.Doctor.IDoctorService;
 import com.baeldung.Doctor.Doctor;
 import com.baeldung.config.AppConfig;
+import com.baeldung.dto.DoctorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,9 @@ public class DoctorController {
     }
 
     @PostMapping("/api/v1/doctors")
-    protected ResponseEntity<Object> doPost(@RequestBody Doctor doctor) {
+    protected ResponseEntity<Object> doPost(@RequestBody DoctorDTO doctorDTO) {
+        Doctor doctor = new Doctor(doctorDTO.getId(), doctorDTO.getFirstName(), doctorDTO.getLastName(),
+                doctorDTO.getGender(), doctorDTO.getSpecialization());
         if (doctorService.addDoctor(doctor)) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -59,7 +62,9 @@ public class DoctorController {
     }
 
     @PutMapping("/api/v1/doctors/{id}")
-    protected ResponseEntity<Object> doPut(@RequestBody Doctor doctor, @PathVariable int id) {
+    protected ResponseEntity<Object> doPut(@RequestBody DoctorDTO doctorDTO, @PathVariable int id) {
+        Doctor doctor = new Doctor(doctorDTO.getFirstName(), doctorDTO.getLastName(),
+                doctorDTO.getGender(), doctorDTO.getSpecialization());
         doctor.setId(id);
         if (doctorService.updateDoctor(doctor)) {
             return new ResponseEntity<>(HttpStatus.OK);
