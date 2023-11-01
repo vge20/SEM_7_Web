@@ -62,4 +62,35 @@ public class PatientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/api/v1/patients/{login}")
+    protected ResponseEntity<Object> doPut(@PathVariable String login, @RequestBody PatientDTO patientDTO) {
+        User user = userService.getUserByLogin(login);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        user = new User(user.getId(), patientDTO.getLogin(), patientDTO.getPassword(), 0,
+                patientDTO.getFirstName(), patientDTO.getLastName(),
+                patientDTO.getGender(), patientDTO.getBirthDate());
+        if (userService.updateUser(user)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("/api/v1/patients/{login}")
+    protected ResponseEntity<Object> doDelete(@PathVariable String login) {
+        User user = userService.getUserByLogin(login);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (userService.deleteUser(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
