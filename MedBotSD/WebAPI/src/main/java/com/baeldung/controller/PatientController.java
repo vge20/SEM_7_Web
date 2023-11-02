@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -39,7 +40,19 @@ public class PatientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
-            return new ResponseEntity<>(usersList, HttpStatus.OK);
+            List<PatientDTO> patientDTOList = new ArrayList<>();
+            for (int i = 0; i < usersList.size(); i++) {
+                PatientDTO patientDTO = new PatientDTO();
+                patientDTO.setId(usersList.get(i).getId());
+                patientDTO.setLogin(usersList.get(i).getLogin());
+                patientDTO.setPassword(usersList.get(i).getPassword());
+                patientDTO.setFirstName(usersList.get(i).getFirstName());
+                patientDTO.setLogin(usersList.get(i).getLogin());
+                patientDTO.setGender(usersList.get(i).getGender());
+                patientDTO.setBirthDate(usersList.get(i).getBirthDate());
+                patientDTOList.add(patientDTO);
+            }
+            return new ResponseEntity<>(patientDTOList, HttpStatus.OK);
         }
     }
 
@@ -50,7 +63,15 @@ public class PatientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            PatientDTO patientDTO = new PatientDTO();
+            patientDTO.setId(user.getId());
+            patientDTO.setLogin(user.getLogin());
+            patientDTO.setPassword(user.getPassword());
+            patientDTO.setFirstName(user.getFirstName());
+            patientDTO.setLogin(user.getLogin());
+            patientDTO.setGender(user.getGender());
+            patientDTO.setBirthDate(user.getBirthDate());
+            return new ResponseEntity<>(patientDTO, HttpStatus.OK);
         }
     }
 
