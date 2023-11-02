@@ -5,6 +5,7 @@ import com.baeldung.Doctor.Doctor;
 import com.baeldung.authentication.Authentication;
 import com.baeldung.config.AppConfig;
 import com.baeldung.dto.DoctorDTO;
+import com.baeldung.dto.PostDoctorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -71,11 +72,11 @@ public class DoctorController {
     }
 
     @PostMapping("/api/v1/doctors")
-    protected ResponseEntity<Object> doPost(@RequestBody DoctorDTO doctorDTO) {
+    protected ResponseEntity<Object> doPost(@RequestBody PostDoctorDTO doctorDTO) {
         if (Authentication.getPrivilegeLevel() < 1) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        Doctor doctor = new Doctor(doctorDTO.getId(), doctorDTO.getFirstName(), doctorDTO.getLastName(),
+        Doctor doctor = new Doctor(doctorDTO.getFirstName(), doctorDTO.getLastName(),
                 doctorDTO.getGender(), doctorDTO.getSpecialization());
         if (doctorService.addDoctor(doctor)) {
             return new ResponseEntity<>(HttpStatus.CREATED);

@@ -6,6 +6,7 @@ import com.baeldung.User.IUserService;
 import com.baeldung.User.User;
 import com.baeldung.authentication.Authentication;
 import com.baeldung.config.AppConfig;
+import com.baeldung.dto.PostRecordDTO;
 import com.baeldung.dto.RecordDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public class RecordController {
     }
 
     @PostMapping("/api/v1/records")
-    protected ResponseEntity<Object> doPost(@RequestBody RecordDTO recordDTO) {
+    protected ResponseEntity<Object> doPost(@RequestBody PostRecordDTO recordDTO) {
         if (Authentication.getPrivilegeLevel() < 0) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

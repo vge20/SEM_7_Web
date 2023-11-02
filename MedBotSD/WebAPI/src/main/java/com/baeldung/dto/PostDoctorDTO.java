@@ -1,36 +1,19 @@
 package com.baeldung.dto;
 
-public class PatchDoctorDTO {
+public class PostDoctorDTO {
 
-    private int id;
     private String firstName;
     private String lastName;
     private Boolean gender;
     private String specialization;
 
-    public PatchDoctorDTO() {}
+    public PostDoctorDTO() {}
 
-    public DoctorDTO(int id, String firstName, String lastName, Boolean gender, String specialization) {
-        this.id = id;
+    public PostDoctorDTO(String firstName, String lastName, Boolean gender, String specialization) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.specialization = specialization;
-    }
-
-    public DoctorDTO(String firstName, String lastName, Boolean gender, String specialization) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.specialization = specialization;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getFirstName() {

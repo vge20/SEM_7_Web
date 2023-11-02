@@ -5,6 +5,7 @@ import com.baeldung.User.User;
 import com.baeldung.authentication.Authentication;
 import com.baeldung.config.AppConfig;
 import com.baeldung.dto.PatientDTO;
+import com.baeldung.dto.PostPatientDTO;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +77,7 @@ public class PatientController {
     }
 
     @PostMapping("/api/v1/patients")
-    protected ResponseEntity<Object> doPost(@RequestBody PatientDTO patientDTO) {
+    protected ResponseEntity<Object> doPost(@RequestBody PostPatientDTO patientDTO) {
         if (Authentication.getPrivilegeLevel() < 0) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
