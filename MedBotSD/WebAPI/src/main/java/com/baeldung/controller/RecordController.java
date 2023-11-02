@@ -45,7 +45,7 @@ public class RecordController {
         ArrayList<Record> recordsList = recordService.getRecordsByPatientDateInterval(patientLogin,
                                         startDate, endDate, limit, skipped);
         if (recordsList == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else {
             List<RecordDTO> recordDTOList = new ArrayList<>();

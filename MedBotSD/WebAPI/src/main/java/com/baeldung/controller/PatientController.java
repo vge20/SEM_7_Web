@@ -37,7 +37,7 @@ public class PatientController {
         }
         List<User> usersList = userService.getUsersListBySubstrGender(gender, substr, limit, skipped);
         if (usersList == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else {
             List<PatientDTO> patientDTOList = new ArrayList<>();
