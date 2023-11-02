@@ -80,6 +80,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Doctors' 
+        '400':
+          description: Невалидные данные
         '500':
           description: Внутренняя ошибка работы сервера
           
@@ -284,6 +286,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Records' 
+        '400':
+          description: Невалидные данные
         '403':
           description: Недостаточно прав
         '500':
@@ -468,6 +472,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Patients' 
+        '400':
+          description: Невалидные данные
         '403':
           description: Недостаточно прав
         '500':
