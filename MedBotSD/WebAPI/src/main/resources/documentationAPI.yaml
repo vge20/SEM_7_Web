@@ -80,8 +80,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Doctors' 
-        '403':
-          description: Недостаточно прав
         '500':
           description: Внутренняя ошибка работы сервера
           
@@ -271,7 +269,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: skiped
+        - name: skipped
           in: query
           description: Сдвиг возврата в коллекции записей
           required: true
@@ -344,8 +342,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Patients'
-        '403':
-          description: Недостаточно прав
         '404':
           description: Пациент с указанным логином не найден
         '400':
@@ -457,7 +453,7 @@ paths:
           required: true
           schema:
             type: integer
-        - name: skiped
+        - name: skipped
           in: query
           description: Сдвиг возврата в коллекции пациентов
           required: true
@@ -525,8 +521,6 @@ paths:
       responses:
         '200':
           description: Аутентификация успешна
-        '403':
-          description: Недостаточно прав
         '404':
           description: Администратор/пользователь с указанным логином и паролем не найден
         '400':
@@ -602,12 +596,6 @@ components:
         birthDate:
           type: string
           example: 1993-05-16
-        hivStatus:
-          type: boolean
-          example: true
-        bloodType:
-          type: integer
-          example: 1
     
     Admins:
       type: object
