@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -47,7 +48,18 @@ public class RecordController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
-            return new ResponseEntity<>(recordsList, HttpStatus.OK);
+            List<RecordDTO> recordDTOList = new ArrayList<>();
+            for (int i = 0; i < recordsList.size(); i++) {
+                RecordDTO recordDTO = new RecordDTO();
+                recordDTO.setId(recordsList.get(i).getId());
+                recordDTO.setDoctorId(recordsList.get(i).getIdDoctor());
+                recordDTO.setPatientLogin(patientLogin);
+                recordDTO.setDate(recordsList.get(i).getDate());
+                recordDTO.setStartTime(recordsList.get(i).getStartTime());
+                recordDTO.setEndTime(recordsList.get(i).getEndTime());
+                recordDTOList.add(recordDTO);
+            }
+            return new ResponseEntity<>(recordDTOList, HttpStatus.OK);
         }
     }
 
