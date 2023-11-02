@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -35,7 +36,17 @@ public class DoctorController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
-            return new ResponseEntity<>(doctorsList, HttpStatus.OK);
+            List<DoctorDTO> doctorDTOList = new ArrayList<>();
+            for (int i = 0; i < doctorsList.size(); i++) {
+                DoctorDTO doctorDTO = new DoctorDTO();
+                doctorDTO.setId(doctorsList.get(i).getId());
+                doctorDTO.setFirstName(doctorsList.get(i).getFirstName());
+                doctorDTO.setLastName(doctorsList.get(i).getLastName());
+                doctorDTO.setGender(doctorsList.get(i).getGender());
+                doctorDTO.setSpecialization(doctorsList.get(i).getSpecialization());
+                doctorDTOList.add(doctorDTO);
+            }
+            return new ResponseEntity<>(doctorDTOList, HttpStatus.OK);
         }
     }
 
@@ -49,7 +60,13 @@ public class DoctorController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else {
-            return new ResponseEntity<>(doctor, HttpStatus.OK);
+            DoctorDTO doctorDTO = new DoctorDTO();
+            doctorDTO.setId(doctor.getId());
+            doctorDTO.setFirstName(doctor.getFirstName());
+            doctorDTO.setLastName(doctor.getLastName());
+            doctorDTO.setGender(doctor.getGender());
+            doctorDTO.setSpecialization(doctor.getSpecialization());
+            return new ResponseEntity<>(doctorDTO, HttpStatus.OK);
         }
     }
 
