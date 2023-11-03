@@ -33,7 +33,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Doctors'
+              $ref: '#/components/schemas/PostDoctors'
         required: true
       responses:
         '201':
@@ -227,7 +227,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Records'
+              $ref: '#/components/schemas/PostRecords'
         required: true
       responses:
         '201':
@@ -419,7 +419,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Patients'
+              $ref: '#/components/schemas/PostPatients'
         required: true
       responses:
         '201':
@@ -556,6 +556,22 @@ components:
           type: string
           example: surgeon
           
+    PostDoctors:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Egor
+        lastName:
+          type: string
+          example: Petrov
+        gender:
+          type: boolean
+          example: true
+        specialization:
+          type: string
+          example: surgeon
+          
     Records:
       type: object
       properties:
@@ -578,12 +594,53 @@ components:
           type: string
           example: '16:30:00'  
     
+    PostRecords:
+      type: object
+      properties:
+        doctorId:
+          type: integer
+          example: 10
+        patientLogin:
+          type: string
+          example: ivan1996
+        date:
+          type: string
+          example: 2023-10-10
+        startTime:
+          type: string
+          example: '16:00:00'
+        endTime:
+          type: string
+          example: '16:30:00'
+    
     Patients:
       type: object
       properties:
         id:
           type: integer
           example: 10
+        login:
+          type: string
+          example: ivan1996
+        password:
+          type: string
+          example: qwerty
+        firstName:
+          type: string
+          example: Dmitry
+        lastName:
+          type: string
+          example: Sobolev
+        gender:
+          type: boolean
+          example: true
+        birthDate:
+          type: string
+          example: 1993-05-16
+    
+    PostPatients:
+      type: object
+      properties:
         login:
           type: string
           example: ivan1996
