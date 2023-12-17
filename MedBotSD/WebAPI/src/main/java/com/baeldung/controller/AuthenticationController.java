@@ -5,6 +5,7 @@ import com.baeldung.User.User;
 import com.baeldung.authentication.Authentication;
 import com.baeldung.config.AppConfig;
 import com.baeldung.dto.AuthenticationDTO;
+import com.baeldung.dto.UserRoleDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -37,7 +38,12 @@ public class AuthenticationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            boolean role = false;
+            if (user.getPrivilegeLevel() == 1) {
+                role = true;
+            }
+            UserRoleDTO userRoleDTO = new UserRoleDTO(role);
+            return new ResponseEntity<>(userRoleDTO, HttpStatus.OK);
         }
     }
 }
