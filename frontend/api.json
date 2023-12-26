@@ -1,0 +1,1003 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Сайт медицинской клиники - OpenAPI 3.0",
+    "description": "Данное приложение позволит автоматизировать запись пациентов к врачам.",
+    "contact": {
+      "email": "glebka.vagapov@mail.ru"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about this application",
+    "url": "https://github.com/vge20"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "doctors",
+      "description": "Операции с врачами клиники"
+    },
+    {
+      "name": "patients",
+      "description": "Операции с пациентами клиники"
+    },
+    {
+      "name": "admins",
+      "description": "Операции с администраторами клиники"
+    },
+    {
+      "name": "records",
+      "description": "Операции с записями пользователей на приём к врачам"
+    }
+  ],
+  "paths": {
+    "/doctors": {
+      "post": {
+        "tags": ["doctors"],
+        "summary": "Добавить нового врача",
+        "operationId": "addDoctor",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostDoctors"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Врач добавлен"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "get": {
+        "tags": ["doctors"],
+        "summary": "Получить список врачей",
+        "operationId": "getDoctorsList",
+        "parameters": [
+          {
+            "name": "specialization",
+            "in": "query",
+            "description": "Специализация врачей",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Лимит количества врачей для возврата",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "skipped",
+            "in": "query",
+            "description": "Сдвиг возврата в коллекции врачей",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список врачей получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Doctors"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/doctors/{id}": {
+      "put": {
+        "tags": ["doctors"],
+        "summary": "Обновить существующего врача",
+        "operationId": "updateDoctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id врача",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Doctors"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Врач обновлён"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Врач с указанным идентификатором не найден"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["doctors"],
+        "summary": "Удалить существующего врача",
+        "operationId": "deleteDoctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id удаляемого врача",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Врач удалён"
+          },
+          "400": {
+            "description": "Невалидный id"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Врач с указанным идентификатором не найден"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "get": {
+        "tags": ["doctors"],
+        "summary": "Получить врача",
+        "operationId": "getDoctor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id врача",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Врач получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Doctors"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидный id"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Врач с указанным идентификатором не найден"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/records": {
+      "delete": {
+        "tags": ["records"],
+        "summary": "Удалить запись на приём",
+        "operationId": "deleteRecord",
+        "parameters": [
+          {
+            "name": "doctorId",
+            "in": "query",
+            "description": "id врача удаляемой записи",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "patientLogin",
+            "in": "query",
+            "description": "Логин пользователя удаляемой записи",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "description": "Дата удаляемой записи",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "Время начала удаляемой записи",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endTime",
+            "in": "query",
+            "description": "Время конца удаляемой записи",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Запись удалена"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Запись с указанными параметрами не найдена"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "post": {
+        "tags": ["records"],
+        "summary": "Добавить запись на приём",
+        "operationId": "addRecord",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostRecords"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Запись добавлена"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "get": {
+        "tags": ["records"],
+        "summary": "Получить список записей",
+        "operationId": "getRecordsList",
+        "parameters": [
+          {
+            "name": "patientLogin",
+            "in": "query",
+            "description": "Логин пациента",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Дата начала",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Дата конца",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Лимит количества записей для возврата",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "skipped",
+            "in": "query",
+            "description": "Сдвиг возврата в коллекции записей",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список записей получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Records"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/records/{id}": {
+      "patch": {
+        "tags": ["records"],
+        "summary": "Обновить запись на приём",
+        "operationId": "updateRecord",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id записи",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Records"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Запись обновлена"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Запись с указанными параметрами не найдена"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/patients/{login}": {
+      "get": {
+        "tags": ["patients"],
+        "summary": "Получить пациента по логину",
+        "operationId": "getPatientByLogin",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Логин пациента",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Пациент получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Patients"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидный id"
+          },
+          "404": {
+            "description": "Пациент с указанным логином не найден"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["patients"],
+        "summary": "Удалить пациента по логину",
+        "operationId": "deletePatientByLogin",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Логин пациента",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Пациент удалён"
+          },
+          "400": {
+            "description": "Невалидный id"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Пациент с указанным логином не найден"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "put": {
+        "tags": ["patients"],
+        "summary": "Обновить пациента",
+        "operationId": "updatePatient",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "path",
+            "description": "Логин пациента",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Patients"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Пациент обновлён"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Пациент с указанными параметрами не найден"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/patients": {
+      "post": {
+        "tags": ["patients"],
+        "summary": "Добавить пациента",
+        "operationId": "addPatient",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostPatients"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Пациент добавлен"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      },
+      "get": {
+        "tags": ["patients"],
+        "summary": "Получить список пациентов",
+        "operationId": "getPatientsList",
+        "parameters": [
+          {
+            "name": "gender",
+            "in": "query",
+            "description": "Пол пациента",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "substr",
+            "in": "query",
+            "description": "Подстрока в логине пациента",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Лимит количества пациентов для возврата",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "skipped",
+            "in": "query",
+            "description": "Сдвиг возврата в коллекции пациентов",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Список пациентов получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Patients"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/admins/{id}": {
+      "put": {
+        "tags": ["admins"],
+        "summary": "Обновить администратора",
+        "operationId": "updateAdmin",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id администратора",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admins"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Администратор обновлён"
+          },
+          "400": {
+            "description": "Невалидные данные"
+          },
+          "403": {
+            "description": "Недостаточно прав"
+          },
+          "404": {
+            "description": "Администратор с указанными параметрами не найден"
+          },
+          "409": {
+            "description": "Конфликт"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    },
+    "/authentications": {
+      "post": {
+        "tags": ["authentications"],
+        "summary": "Аутентификация",
+        "operationId": "authentification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationParameters"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Аутентификация успешна",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRole"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Невалидные параметры"
+          },
+          "404": {
+            "description": "Администратор/пользователь с указанным логином и паролем не найден"
+          },
+          "500": {
+            "description": "Внутренняя ошибка работы сервера"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Doctors": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Egor"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Petrov"
+          },
+          "gender": {
+            "type": "boolean",
+            "example": true
+          },
+          "specialization": {
+            "type": "string",
+            "example": "surgeon"
+          }
+        }
+      },
+      "PostDoctors": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "Egor"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Petrov"
+          },
+          "gender": {
+            "type": "boolean",
+            "example": true
+          },
+          "specialization": {
+            "type": "string",
+            "example": "surgeon"
+          }
+        }
+      },
+      "Records": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "doctorId": {
+            "type": "integer",
+            "example": 10
+          },
+          "patientLogin": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-10-10T00:00:00.000Z"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "16:00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "16:30:00"
+          }
+        }
+      },
+      "PostRecords": {
+        "type": "object",
+        "properties": {
+          "doctorId": {
+            "type": "integer",
+            "example": 10
+          },
+          "patientLogin": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "date": {
+            "type": "string",
+            "example": "2023-10-10T00:00:00.000Z"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "16:00:00"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "16:30:00"
+          }
+        }
+      },
+      "Patients": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "login": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "password": {
+            "type": "string",
+            "example": "qwerty"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Dmitry"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Sobolev"
+          },
+          "gender": {
+            "type": "boolean",
+            "example": true
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "1993-05-16T00:00:00.000Z"
+          }
+        }
+      },
+      "PostPatients": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "password": {
+            "type": "string",
+            "example": "qwerty"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Dmitry"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Sobolev"
+          },
+          "gender": {
+            "type": "boolean",
+            "example": true
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "1993-05-16T00:00:00.000Z"
+          }
+        }
+      },
+      "Admins": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 10
+          },
+          "login": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "password": {
+            "type": "string",
+            "example": "qwerty"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Ivan"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Nosov"
+          },
+          "gender": {
+            "type": "boolean",
+            "example": true
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "1997-07-02T00:00:00.000Z"
+          }
+        }
+      },
+      "AuthenticationParameters": {
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "example": "ivan1996"
+          },
+          "password": {
+            "type": "string",
+            "example": "qwerty"
+          }
+        }
+      },
+      "UserRole": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      }
+    }
+  }
+}

@@ -69,7 +69,7 @@ public class PatientController {
             patientDTO.setLogin(user.getLogin());
             patientDTO.setPassword(user.getPassword());
             patientDTO.setFirstName(user.getFirstName());
-            patientDTO.setLogin(user.getLogin());
+            patientDTO.setLastName(user.getLastName());
             patientDTO.setGender(user.getGender());
             patientDTO.setBirthDate(user.getBirthDate());
             return new ResponseEntity<>(patientDTO, HttpStatus.OK);

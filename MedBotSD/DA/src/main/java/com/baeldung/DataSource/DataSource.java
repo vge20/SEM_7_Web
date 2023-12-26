@@ -23,8 +23,8 @@ public class DataSource {
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres");
         dataSource.setMinIdle(5);
-        dataSource.setMaxTotal(10);
-        dataSource.setMaxWait(Duration.ofMinutes(10));
+        dataSource.setMaxTotal(300);
+        dataSource.setMaxWait(Duration.ofMinutes(1));
     }
 
     public static Connection getConnection() throws SQLException {

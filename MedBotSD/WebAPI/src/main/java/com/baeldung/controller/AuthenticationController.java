@@ -33,11 +33,11 @@ public class AuthenticationController {
     @PostMapping("/api/v1/authentications")
     protected ResponseEntity<Object> doPost(@RequestBody AuthenticationDTO authenticationDTO) {
         User user = userService.logIn(authenticationDTO.getLogin(), authenticationDTO.getPassword());
-        Authentication.setPrivilegeLevel(user.getPrivilegeLevel());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else {
+            Authentication.setPrivilegeLevel(user.getPrivilegeLevel());
             boolean role = false;
             if (user.getPrivilegeLevel() == 1) {
                 role = true;

@@ -1,0 +1,44 @@
+.form {
+  background-color: rgba(183, 199, 255, 1);
+  padding: 12px;
+  border-radius: 10px;
+
+  max-width: 520px;
+  width: 90%;
+}
+
+.form-content table td {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-content table td {
+  padding-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: rgba(183, 199, 255, 1);
+  padding: 12px;
+  border-radius: 10px;
+
+  max-width: 520px;
+  width: 90%;
+}
+
+.card > .actions {
+  margin-top: 20px;
+}
+
+.card.normal {
+  width: 450px;
+}
+
+.card.large {
+}

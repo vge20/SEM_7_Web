@@ -34,7 +34,7 @@ public class DoctorController {
                                            @RequestParam int skipped) {
         List<Doctor> doctorsList = doctorService.getDoctorsList(specialization, limit, skipped);
         if (doctorsList == null) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ArrayList<>(0), HttpStatus.OK);
         }
         else {
             List<DoctorDTO> doctorDTOList = new ArrayList<>();
