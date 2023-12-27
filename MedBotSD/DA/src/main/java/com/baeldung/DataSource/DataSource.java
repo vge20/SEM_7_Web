@@ -24,7 +24,7 @@ public class DataSource {
         dataSource.setPassword("postgres");
         dataSource.setMinIdle(5);
         dataSource.setMaxTotal(300);
-        dataSource.setMaxWait(Duration.ofMinutes(1));
+        dataSource.setMaxWait(Duration.ofSeconds(10));
     }
 
     public static Connection getConnection() throws SQLException {

@@ -59,7 +59,7 @@ export const RecordForm: FC<RecordFormProps> = ({ record, submit, doctor }) => {
       <div className="form-content">
         <table>
           <tbody>
-            {record && (
+            {(
               <>
                 <tr>
                   <td width={180}>Имя врача</td>

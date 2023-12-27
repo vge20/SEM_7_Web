@@ -116,7 +116,7 @@ export const RecordsPage: FC = () => {
 
             <div className="flex gap-35">
               <div className="flex-horizontal">
-                <label htmlFor="end">Специализация*:</label>
+                <label htmlFor="end">Специализация:</label>
                 <input
                   type="text"
                   id="end"
