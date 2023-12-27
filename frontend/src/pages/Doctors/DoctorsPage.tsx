@@ -26,7 +26,7 @@ export const DoctorsPage: FC = () => {
         skipped: 0,
       });
 
-      setDoctors(doctors);
+      setDoctors(doctors ?? []);
     } catch (err) {}
   };
 
@@ -71,7 +71,7 @@ export const DoctorsPage: FC = () => {
       </div>
 
       <div className="flex-wrap cards-table">
-        {doctors.map((doctor) => (
+        {doctors?.map?.((doctor) => (
           <DoctorCard
             doctor={doctor}
             key={doctor.id}

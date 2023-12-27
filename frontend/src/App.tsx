@@ -21,6 +21,26 @@ const App: FC = () => {
   const [role, setRole] = useState(false);
   const [login, setLogin] = useState("");
 
+  if (!login) {
+    return (
+      <Context.Provider value={{ role, setRole, login, setLogin }}>
+        <BrowserRouter>
+          <GoBackButton />
+          <Routes>
+            <Route path="/start" element={<StartPage />} />
+
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+
+            <Route path="/doctors" element={<DoctorsPage />} />
+
+            <Route path="*" element={<Navigate to="/start" />} />
+          </Routes>
+        </BrowserRouter>
+      </Context.Provider>
+    );
+  }
+
   return (
     <Context.Provider value={{ role, setRole, login, setLogin }}>
       <BrowserRouter>
@@ -47,7 +67,7 @@ const App: FC = () => {
           <Route path="/records" element={<RecordsPage />} />
           <Route path="/create-record" element={<CreateRecordPage />} />
           <Route
-            path="/edit-record/:recordId/:doctorName/:doctorLastName"
+            path="/edit-record/:recordId/:doctorName/:doctorLastName/:specialization"
             element={<EditRecordPage />}
           />
 

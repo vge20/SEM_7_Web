@@ -48,7 +48,7 @@ public class PatientController {
                 patientDTO.setLogin(usersList.get(i).getLogin());
                 patientDTO.setPassword(usersList.get(i).getPassword());
                 patientDTO.setFirstName(usersList.get(i).getFirstName());
-                patientDTO.setLogin(usersList.get(i).getLogin());
+                patientDTO.setLastName(usersList.get(i).getLastName());
                 patientDTO.setGender(usersList.get(i).getGender());
                 patientDTO.setBirthDate(usersList.get(i).getBirthDate());
                 patientDTOList.add(patientDTO);

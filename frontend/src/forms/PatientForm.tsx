@@ -13,10 +13,10 @@ export const PatientForm: FC<PatientFormProps> = ({ patient, submit }) => {
     initialValue: {
       login: patient?.login || "",
       password: patient?.password || "",
-      name: patient?.firstName || "",
-      surname: patient?.lastName || "",
+      firstName: patient?.firstName || "",
+      lastName: patient?.lastName || "",
       gender: patient?.gender ? genderToString(patient.gender) : "М",
-      birthday: patient?.birthDate || "",
+      birthDate: patient?.birthDate || "",
     },
     submit: (result) => {
       submit?.({
@@ -47,13 +47,13 @@ export const PatientForm: FC<PatientFormProps> = ({ patient, submit }) => {
             <tr>
               <td>Имя</td>
               <td>
-                <input {...fields.name} type="text" />
+                <input {...fields.firstName} type="text" />
               </td>
             </tr>
             <tr>
               <td>Фамилия</td>
               <td>
-                <input {...fields.surname} type="text" />
+                <input {...fields.lastName} type="text" />
               </td>
             </tr>
             <tr>
@@ -71,7 +71,7 @@ export const PatientForm: FC<PatientFormProps> = ({ patient, submit }) => {
             <tr>
               <td>Дата рождения:</td>
               <td>
-                <input {...fields.birthday} type="text" />
+                <input {...fields.birthDate} type="text" />
               </td>
             </tr>
           </tbody>

@@ -1,5 +1,6 @@
 package com.baeldung.controller;
 
+import com.baeldung.Record.IRecordRepository;
 import com.baeldung.Record.IRecordService;
 import com.baeldung.Record.Record;
 import com.baeldung.User.IUserService;
@@ -24,6 +25,8 @@ public class RecordController {
 
     private IRecordService recordService;
 
+    private IRecordRepository recordRepository;
+
     private IUserService userService;
 
     public RecordController() {
@@ -31,8 +34,23 @@ public class RecordController {
             AppConfig appConfig = new AppConfig();
             recordService = appConfig.getRecordServiceImpl();
             userService = appConfig.getUserServiceImpl();
+            recordRepository  = appConfig.getRecordRepositoryImpl();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/api/v1/records/{id}")
+    protected ResponseEntity<Object> doGet(@PathVariable int id) throws Exception {
+        if (Authentication.getPrivilegeLevel() < 0) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        Record resRecord = recordRepository.getRecordById(id);
+        if (resRecord == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else {
+            return new ResponseEntity<>(resRecord, HttpStatus.OK);
         }
     }
 

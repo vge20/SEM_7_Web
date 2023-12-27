@@ -19,6 +19,12 @@ export class PatientsService {
         return data;
     }
 
+    async updateAdmin(dto: Patient) {
+        const {data} = await this.api.put<void>(`/admins/${dto.id}`, dto);
+
+        return data;
+    }
+
     async getPatientByLogin(login: string) {
         const {data} = await this.api.get<Patient>(`/patients/${login}`);
 
@@ -33,13 +39,13 @@ export class PatientsService {
             skipped: String(args.skipped),
         });
 
-        const {data} = await this.api.get<Patient[]>(`/patients?${query.toString()}`);
+        const {data} = await this.api.get<Patient[] | undefined>(`/patients?${query.toString()}`);
 
         return data;
     }
 
     async deletePatient(login: string) {
-        const {data} = await this.api.delete<Patient>(`/patients/${login}`);
+        const {data} = await this.api.delete<void>(`/patients/${login}`);
 
         return data;
     }

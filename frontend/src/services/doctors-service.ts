@@ -30,7 +30,7 @@ export class DoctorsService {
             skipped: String(params.skipped),
         });
 
-        return (await this.api.get<Doctor[]>(`/doctors?${query.toString()}`)).data;
+        return (await this.api.get<Doctor[] | undefined>(`/doctors?${query.toString()}`)).data;
     }
 
     async deleteDoctor(id: number) {

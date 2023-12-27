@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { PatientCard } from "./components/PatientCard";
 import { Patient } from "../../interfaces/interface";
 import { useNavigate } from "react-router";
@@ -27,7 +27,7 @@ export const PatientsPage: FC = () => {
         gender: gender,
       });
 
-      setPatients(result);
+      setPatients(result ?? []);
     } catch (err) {}
   };
 
@@ -48,10 +48,6 @@ export const PatientsPage: FC = () => {
   const editPatient = (login: string) => {
     navigate(`/edit-patient/${login}`);
   };
-
-  useEffect(() => {
-    getPatients();
-  }, []);
 
   return (
     <div className="page flex-top pt-20">
@@ -104,7 +100,7 @@ export const PatientsPage: FC = () => {
       </div>
 
       <div className="flex-wrap cards-table large">
-        {patients.map((patient) => (
+        {patients?.map?.((patient) => (
           <PatientCard
             patient={patient}
             key={patient.id}

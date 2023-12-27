@@ -9,11 +9,14 @@ interface RouteParams {
   recordId: string;
   doctorName: string;
   doctorLastName: string;
+  specialization: string;
   [key: string]: string;
 }
 
 export const EditRecordPage: FC = () => {
-  const { recordId, doctorLastName, doctorName } = useParams<RouteParams>();
+  const { recordId, doctorLastName, doctorName, specialization } = useParams<
+    RouteParams
+  >();
 
   const recordsService = new RecordsService(axiosInstance);
 
@@ -21,7 +24,7 @@ export const EditRecordPage: FC = () => {
 
   const navigate = useNavigate();
 
-  const getPatient = async () => {
+  const getRecord = async () => {
     try {
       const id = Number(recordId);
 
@@ -35,13 +38,13 @@ export const EditRecordPage: FC = () => {
     try {
       await recordsService.updateRecord(record);
 
-      navigate("/patients");
+      navigate("/records");
     } catch (err) {}
   };
 
   useEffect(() => {
     if (recordId) {
-      getPatient();
+      getRecord();
     }
   }, [recordId]);
 
@@ -62,6 +65,7 @@ export const EditRecordPage: FC = () => {
         doctor={{
           firstName: doctorName,
           lastName: doctorLastName,
+          specialization: specialization,
         }}
       />
     </div>

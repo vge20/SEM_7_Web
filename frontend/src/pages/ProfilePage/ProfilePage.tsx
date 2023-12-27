@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { PatientsService } from "../../services/patients-service";
 import { axiosInstance } from "../../axios";
 import { Context } from "../../context/context";
+import { useUserData } from "../../hooks/user-data.hook";
 
 export const ProfilePage: FC = () => {
   const patientsService = new PatientsService(axiosInstance);
@@ -12,6 +13,8 @@ export const ProfilePage: FC = () => {
   const [patient, setPatient] = useState<Patient | undefined>();
 
   const { login } = useContext(Context);
+
+  const { isAdmin } = useUserData();
 
   const navigate = useNavigate();
 
@@ -25,9 +28,13 @@ export const ProfilePage: FC = () => {
 
   const updateProfile = async (patient: Patient) => {
     try {
-      await patientsService.updatePatient(patient);
+      if (isAdmin) {
+        await patientsService.updateAdmin(patient);
+      } else {
+        await patientsService.updatePatient(patient);
+      }
 
-      navigate("/patients");
+      navigate("/main");
     } catch (err) {}
   };
 

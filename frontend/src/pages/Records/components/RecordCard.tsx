@@ -7,7 +7,7 @@ interface RecordCardProps {
   doctors: Doctor[];
 
   onEdit?: (id: number, doctor: Doctor) => void;
-  onDelete?: (id: number) => void;
+  onDelete?: (id: Record) => void;
 }
 
 export const RecordCard: FC<RecordCardProps> = ({
@@ -18,7 +18,11 @@ export const RecordCard: FC<RecordCardProps> = ({
 }) => {
   const { isAdmin } = useUserData();
 
-  const doctor = doctors.find((d) => d.id === record.doctorId);
+  const doctor = doctors?.find?.((d) => d.id === record.doctorId);
+
+  if (!doctor) {
+    return null;
+  }
 
   return (
     <div className="card large">
@@ -33,7 +37,7 @@ export const RecordCard: FC<RecordCardProps> = ({
           <button onClick={() => onEdit?.(record.id!, doctor!)}>
             Изменить
           </button>
-          <button onClick={() => onDelete?.(record.id!)}>Удалить</button>
+          <button onClick={() => onDelete?.(record)}>Удалить</button>
         </div>
       )}
     </div>

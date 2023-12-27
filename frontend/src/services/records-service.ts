@@ -14,7 +14,7 @@ export class RecordsService {
     }
 
     async updateRecord(dto: Record) {
-        const {data} = await this.api.put<void>(`/records/${dto.id}`, dto);
+        const {data} = await this.api.patch<void>(`/records/${dto.id}`, dto);
 
         return data;
     }
@@ -40,13 +40,21 @@ export class RecordsService {
             skipped: String(params.skipped),
         });
 
-        const {data} = await this.api.get<Record[]>(`/records?${query.toString()}`);
+        const {data} = await this.api.get<Record[] | undefined>(`/records?${query.toString()}`);
 
         return data;
     }
 
-    async deleteRecord(id: number) {
-        const {data} = await this.api.delete<Record>(`/records/${id}`);
+    async deleteRecord(record: Record) {
+        const query = new URLSearchParams({
+            doctorId: String(record.doctorId),
+            patientLogin: record.patientLogin!,
+            date: String(record.date),
+            startTime: String(record.startTime),
+            endTime: String(record.endTime),
+        });
+
+        const {data} = await this.api.delete<void>(`/records?${query.toString()}`);
 
         return data;
     }

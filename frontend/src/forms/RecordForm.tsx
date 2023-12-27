@@ -21,7 +21,7 @@ export const RecordForm: FC<RecordFormProps> = ({ record, submit, doctor }) => {
       date: record?.date || "",
       start: record?.startTime || "",
       end: record?.endTime || "",
-      specialization: "",
+      specialization: doctor?.specialization ?? "",
     },
     submit: async (data) => {
       try {
@@ -31,7 +31,7 @@ export const RecordForm: FC<RecordFormProps> = ({ record, submit, doctor }) => {
           specialization: data.specialization,
         });
 
-        const doctor = doctors.find(
+        const doctor = doctors?.find?.(
           (d) =>
             d.firstName === data.doctorName &&
             d.lastName === data.doctorLastName
@@ -59,33 +59,38 @@ export const RecordForm: FC<RecordFormProps> = ({ record, submit, doctor }) => {
       <div className="form-content">
         <table>
           <tbody>
+            {record && (
+              <>
+                <tr>
+                  <td width={180}>Имя врача</td>
+                  <td width={300}>
+                    <input {...fields.doctorName} />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Фамилия врача</td>
+                  <td>
+                    <input {...fields.doctorLastName} type="text" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Специализация</td>
+                  <td>
+                    <input {...fields.specialization} type="text" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>Логин пользователя</td>
+                  <td>
+                    <input {...fields.login} type="text" />
+                  </td>
+                </tr>
+              </>
+            )}
+
             <tr>
-              <td width={180}>Имя врача</td>
+              <td width={180}>Дата</td>
               <td width={300}>
-                <input {...fields.doctorName} />
-              </td>
-            </tr>
-            <tr>
-              <td>Фамилия врача</td>
-              <td>
-                <input {...fields.doctorLastName} type="text" />
-              </td>
-            </tr>
-            <tr>
-              <td>Специализация</td>
-              <td>
-                <input {...fields.specialization} type="text" />
-              </td>
-            </tr>
-            <tr>
-              <td>Логин</td>
-              <td>
-                <input {...fields.login} type="text" />
-              </td>
-            </tr>
-            <tr>
-              <td>Дата</td>
-              <td>
                 <input {...fields.date} type="text" />
               </td>
             </tr>
