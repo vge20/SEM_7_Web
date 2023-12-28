@@ -78,9 +78,6 @@ public class PatientController {
 
     @PostMapping("/api/v1/patients")
     protected ResponseEntity<Object> doPost(@RequestBody PostPatientDTO patientDTO) {
-        if (Authentication.getPrivilegeLevel() < 0) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         User user = new User(patientDTO.getLogin(), patientDTO.getPassword(), 0,
                 patientDTO.getFirstName(), patientDTO.getLastName(),
                 patientDTO.getGender(), patientDTO.getBirthDate());
