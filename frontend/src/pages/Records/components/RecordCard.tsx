@@ -16,7 +16,7 @@ export const RecordCard: FC<RecordCardProps> = ({
   onEdit,
   doctors,
 }) => {
-  const { isAdmin } = useUserData();
+  const { isAdmin, login } = useUserData();
 
   const doctor = doctors?.find?.((d) => d.id === record.doctorId);
 
@@ -32,7 +32,7 @@ export const RecordCard: FC<RecordCardProps> = ({
       <p>Начало: {record.startTime}</p>
       <p>Конец: {record.endTime}</p>
 
-      {isAdmin && (
+      {(isAdmin || record.patientLogin === login) && (
         <div className="actions flex-between">
           <button onClick={() => onEdit?.(record.id!, doctor!)}>
             Изменить
